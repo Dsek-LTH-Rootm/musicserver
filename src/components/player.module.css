@@ -9,6 +9,7 @@
   padding-top: 10px;
   z-index: 10;
   background-color: black;
+  position: fixed;
 }
 
 .button {
@@ -23,10 +24,12 @@
 
 
 .button:hover {
+  cursor: pointer;
   color: darkgray;
 }
 
 .button:active {
+  transform: scale(0.9);
   color: gray;
 }
 
@@ -44,6 +47,7 @@
 }
 
 .info {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: 20%;
@@ -57,6 +61,7 @@
 }
 
 .infoHide {
+  cursor: pointer;
   padding-left: 10px;
   width: 20%;
   display: flex;
@@ -67,11 +72,13 @@
 }
 
 .infoText {
-  font-size: 0.8em;
+  width: 100%;
+  font-size: 1em;
   padding-left: 5px;
   margin-top: 10px;
   height: 50px;
   color: white;
+  text-align: left;
 }
 
 .bar {

@@ -1,5 +1,64 @@
 .container {
   height: 100%;
   width: 80%;
-  background-color: red;
+}
+
+.smallContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  background-color: black;
+  padding: 5px;
+  border: 1px solid gray;
+}
+
+.title {
+  font-size: 1.1em;
+  margin-right: 20px;
+}
+
+.artist {
+  font-size: 0.8em;
+  color: lightgray;
+  right: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-right: 20px;
+}
+
+.artist:hover,
+.title:hover {
+  text-decoration: underline;
+}
+
+.duration {
+  right: 0px;
+  text-align: right;
+}
+
+.cover {
+  height: 100%;
+  margin-right: 10px;
+  aspect-ratio: 1 / 1;
+}
+
+.button {
+  color: white;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: 2em;
+  margin-right: 10px;
+  background-color: transparent;
+  border: 0px transparent;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button:active {
+  transform: scale(0.9);
 }

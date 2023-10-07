@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import styles from './player.module.css';
-import { LeftOutlined, RightOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined, PlayCircleFilled } from "@ant-design/icons";
 
 
 export default function Player() {
@@ -33,7 +33,7 @@ export default function Player() {
         </div>
       </button>
       <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
-      <button className={styles.button} type="button" onClick={play}><PlayCircleOutlined className={styles.icon} /></button>
+      <button className={styles.button} type="button" onClick={play}><PlayCircleFilled className={styles.icon} /></button>
       <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
       <div className={styles.bar}></div>
     </div >

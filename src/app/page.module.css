@@ -1,9 +1,9 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   min-height: 100vh;
-  padding-top: 6rem;
+  padding-top: 2rem;
+  background-color: rgb(29, 29, 29);
 }
 
 .description {
@@ -15,4 +15,6 @@
   width: 100%;
   z-index: 2;
   font-family: var(--font-mono);
+  color: white;
+  margin-left: 50px;
 }
