@@ -2,21 +2,22 @@
 import { useState } from 'react';
 import styles from './player.module.css';
 import { LeftOutlined, RightOutlined, PlayCircleFilled } from "@ant-design/icons";
+import { play, skipBack, skipNext } from '@/API';
 
 
 export default function Player() {
-  const [infoHide, setInfoHide] = useState<boolean>();
+  const [infoHide, setInfoHide] = useState<boolean>(true);
 
   const back = () => {
-    console.log("back");
+    skipBack();
   }
 
-  const play = () => {
-    console.log("play");
+  const resume = () => {
+    play();
   }
 
   const forward = () => {
-    console.log("forward");
+    skipNext();
   }
 
   const hide = () => {
@@ -33,7 +34,7 @@ export default function Player() {
         </div>
       </button>
       <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
-      <button className={styles.button} type="button" onClick={play}><PlayCircleFilled className={styles.icon} /></button>
+      <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
       <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
       <div className={styles.bar}></div>
     </div >

@@ -1,6 +1,6 @@
 .container {
   height: 100%;
-  width: 80%;
+  width: 100%;
 }
 
 .smallContainer {
@@ -12,6 +12,7 @@
   background-color: black;
   padding: 5px;
   border: 1px solid gray;
+  color: white;
 }
 
 .title {
@@ -56,9 +57,14 @@
 }
 
 .button:hover {
+  color: gray;
   cursor: pointer;
 }
 
 .button:active {
   transform: scale(0.9);
+}
+
+.rowTitle {
+  color: white;
 }

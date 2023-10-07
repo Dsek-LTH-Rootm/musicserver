@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@spotify/web-api-ts-sdk": "^1.1.2",
     "axios": "^1.5.1",
     "next": "13.5.4",
     "react": "^18",
