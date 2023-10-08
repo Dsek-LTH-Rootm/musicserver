@@ -1,7 +1,7 @@
 import styles from './view.module.css';
 import { PlaylistBase, simplifiedArtist } from '@/types';
 import { PlayCircleFilled } from '@ant-design/icons';
-import { addToQueue } from '@/API';
+import { addToQueue, play } from '@/API';
 import ViewTrack from './view_items/ViewTrack';
 import { PartialSearchResult, Playlist, SimplifiedArtist, Track } from '@spotify/web-api-ts-sdk';
 import { pickProp } from './Browse';
@@ -24,6 +24,11 @@ export default function View({ props }: pickProp) {
   // }, [props]);
 
   // move to separate components later
+
+  const resume = (context_uri: string) => {
+    play(context_uri);
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.rowContainer}>
@@ -36,7 +41,7 @@ export default function View({ props }: pickProp) {
         <h3 className={styles.rowTitle}>Playlists</h3>
         {props?.playlists?.items.map((playlist: PlaylistBase, index: number) =>
           <div key={index} className={styles.smallContainer}>
-            <button className={styles.button}><PlayCircleFilled /></button>
+            <button className={styles.button} onClick={() => resume(playlist.uri)}><PlayCircleFilled /></button>
             <a className={styles.cover} target="_blank" href={playlist.external_urls?.spotify}><img src={playlist.images[0]?.url} className={styles.cover} /></a>
             <a href={playlist.external_urls?.spotify} target="_blank" className={styles.title}>{playlist.name}</a>
             <div className={styles.artist}>

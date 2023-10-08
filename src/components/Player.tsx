@@ -1,12 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './player.module.css';
-import { LeftOutlined, RightOutlined, PlayCircleFilled } from "@ant-design/icons";
-import { play, skipBack, skipNext } from '@/API';
+import { LeftOutlined, RightOutlined, PlayCircleFilled, PauseCircleFilled } from "@ant-design/icons";
+import { getAccessToken, pause, play, skipBack, skipNext } from '@/API';
+import { AccessToken, Track } from '@spotify/web-api-ts-sdk';
 
 
 export default function Player() {
   const [infoHide, setInfoHide] = useState<boolean>(true);
+  const [is_paused, setPaused] = useState<boolean>(false);
+  const [is_active, setActive] = useState<boolean>(false);
+  const [currentTrack, setTrack] = useState<Track>();
+  const [player, setPlayer] = useState();
 
   const back = () => {
     skipBack();
@@ -14,6 +19,10 @@ export default function Player() {
 
   const resume = () => {
     play();
+  }
+
+  const stop = () => {
+    pause();
   }
 
   const forward = () => {
@@ -34,6 +43,7 @@ export default function Player() {
         </div>
       </button>
       <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
+      <button className={styles.button} type="button" onClick={stop}><PauseCircleFilled className={styles.icon} /></button>
       <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
       <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
       <div className={styles.bar}></div>

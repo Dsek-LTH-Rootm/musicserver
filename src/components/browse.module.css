@@ -4,6 +4,7 @@
   align-items: flex-end;
   width: 100vw;
   height: 100%;
+  margin-bottom: 100px;
 }
 
 .container {
@@ -116,5 +117,9 @@
 
   .button {
     margin-right: 0px;
+  }
+
+  .tabButton {
+    margin-left: 5px;
   }
 }

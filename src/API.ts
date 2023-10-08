@@ -29,7 +29,7 @@ export async function skipNext() {
   try {
     await sdk.player.skipToNext("");
   } catch (error) {
-    console.log(error);
+    activateDevice();
   }
 }
 
@@ -37,15 +37,26 @@ export async function skipBack() {
   try {
     await sdk.player.skipToPrevious("");
   } catch (error) {
-    console.log(error);
+    activateDevice();
   }
 }
 
 export async function play(context_uri?: string) {
   try {
+    if (context_uri) {
+      await sdk.player.togglePlaybackShuffle(true);
+    }
     await sdk.player.startResumePlayback("", context_uri);
   } catch (error) {
-    console.log(error);
+    activateDevice();
+  }
+}
+
+export async function pause() {
+  try {
+    await sdk.player.pausePlayback("");
+  } catch (error) {
+    activateDevice();
   }
 }
 
@@ -68,4 +79,8 @@ export async function getQueue() {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function getAccessToken() {
+  return sdk.getAccessToken();
 }

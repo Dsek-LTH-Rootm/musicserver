@@ -44,7 +44,7 @@ export default function Browse() {
         </form>
       </div>
       {!showSearch && (
-        <ViewQueue />
+        <ViewQueue show={!showSearch} />
       )}
       {showSearch && (
         <View props={result as Pick<PartialSearchResult, "albums" | "playlists" | "tracks">} />
