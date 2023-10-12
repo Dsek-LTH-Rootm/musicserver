@@ -1,5 +1,5 @@
 "use server"
-import { AccessToken, SpotifyApi } from '@spotify/web-api-ts-sdk';
+import { SpotifyApi, AccessToken } from '@spotify/web-api-ts-sdk';
 
 var sdk: SpotifyApi;
 
