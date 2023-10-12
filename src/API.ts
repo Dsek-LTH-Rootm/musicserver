@@ -2,9 +2,11 @@
 import { SpotifyApi, AccessToken } from '@spotify/web-api-ts-sdk';
 
 var sdk: SpotifyApi;
+var active_device: string | null;
 
 export async function updateAccessToken(accessToken: AccessToken) {
-  sdk = SpotifyApi.withAccessToken("client-id", accessToken);
+  console.log(accessToken);
+  sdk = SpotifyApi.withAccessToken("f6c2c310440440ada66232669bb965b6", accessToken);
 }
 
 export async function search(query: string) {
@@ -19,7 +21,7 @@ export async function search(query: string) {
 
 export async function addToQueue(uri: string) {
   try {
-    await sdk.player.addItemToPlaybackQueue(uri);
+    await sdk.player.addItemToPlaybackQueue(uri, active_device!);
     console.log("Added to queue");
   } catch (error) {
     activateDevice();
@@ -28,7 +30,7 @@ export async function addToQueue(uri: string) {
 
 export async function skipNext() {
   try {
-    await sdk.player.skipToNext("");
+    await sdk.player.skipToNext(active_device!);
     console.log("Skipped next");
   } catch (error) {
     activateDevice();
@@ -37,7 +39,7 @@ export async function skipNext() {
 
 export async function skipBack() {
   try {
-    await sdk.player.skipToPrevious("");
+    await sdk.player.skipToPrevious(active_device!);
     console.log("Skipped back");
   } catch (error) {
     activateDevice();
@@ -49,7 +51,7 @@ export async function play(context_uri?: string) {
     if (context_uri) {
       await sdk.player.togglePlaybackShuffle(true);
     }
-    await sdk.player.startResumePlayback("", context_uri);
+    await sdk.player.startResumePlayback(active_device!, context_uri);
     console.log("Started playing");
   } catch (error) {
     activateDevice();
@@ -58,7 +60,7 @@ export async function play(context_uri?: string) {
 
 export async function pause() {
   try {
-    await sdk.player.pausePlayback("");
+    await sdk.player.pausePlayback(active_device!);
     console.log("Paused");
   } catch (error) {
     activateDevice();
@@ -67,13 +69,13 @@ export async function pause() {
 
 async function activateDevice() {
   const response = await sdk.player.getAvailableDevices();
-  console.log(response);
   response.devices.forEach(element => {
     const devices = [
       element.id
     ];
     sdk.player.transferPlayback(devices as string[], true);
-    console.log("Found device");
+    console.log("Found device " + element.id);
+    active_device = element.id;
   });
 
 }
@@ -93,5 +95,15 @@ export async function getAccessToken() {
     return null;
   } else {
     return await sdk.getAccessToken();
+  }
+}
+
+export async function getCurrentStatus() {
+  try {
+    const response = await sdk?.player.getCurrentlyPlayingTrack();
+    console.log(response);
+    return response;
+  } catch (error) {
+    activateDevice();
   }
 }
