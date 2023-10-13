@@ -20,7 +20,6 @@ export default function Auth() {
     <div>
       {!authenticated && (
         <p>
-          Auth pls.
         </p>
       )}
     </div>

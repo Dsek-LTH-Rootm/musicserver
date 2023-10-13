@@ -15,8 +15,6 @@ export default function ViewQueue({ show }: viewQueueProp) {
   const [currentTrack, setCurrentTrack] = useState<Track>();
 
   useEffect(() => {
-    console.log("test");
-
     if (!show) return;
 
     const data = getQueue();
@@ -34,9 +32,9 @@ export default function ViewQueue({ show }: viewQueueProp) {
   return (
     <div className={styles.container}>
       <div className={styles.rowContainer}>
-        <ViewTrack track={currentTrack as Track} func={play} />
+        <ViewTrack track={currentTrack as Track} func={play} showButton={false} />
         {tracks?.map((track: Track, index: number, tracks: Track[]) =>
-          <ViewTrack key={index} track={track} func={play} />
+          <ViewTrack key={index} track={track} func={play} showButton={false} />
         )}
       </div>
     </div>

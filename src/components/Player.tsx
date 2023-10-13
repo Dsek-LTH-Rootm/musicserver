@@ -1,16 +1,22 @@
 'use client';
 import styles from './player.module.css';
 import { LeftOutlined, RightOutlined, PlayCircleFilled, PauseCircleFilled } from "@ant-design/icons";
-import { pause, play, skipBack, skipNext } from '@/API';
-import { PlaybackState, Track, TrackItem } from '@spotify/web-api-ts-sdk';
-import { useState } from 'react';
+import { getCurrentStatus, pause, play, skipBack, skipNext } from '@/API';
+import { PlaybackState, Track } from '@spotify/web-api-ts-sdk';
+import { useEffect, useState } from 'react';
 
-interface playerProps {
-  props: PlaybackState;
-}
-
-export default function Player({ props }: playerProps) {
+export default function Player() {
   const [infoHide, setInfoHide] = useState<boolean>(true);
+  const [currentTrack, setCurrentTrack] = useState<PlaybackState>();
+
+  useEffect(() => {
+    setInterval(async () => {
+      const data = await getCurrentStatus();
+      if (data !== undefined) {
+        setCurrentTrack(data);
+      }
+    }, 5000);
+  }, []);
 
   const back = () => {
     skipBack();
@@ -35,15 +41,19 @@ export default function Player({ props }: playerProps) {
   return (
     <div className={styles.container}>
       <button className={infoHide ? styles.infoHide : styles.info} type="button" onClick={hide}>
-        <img className={styles.icon} src={(props?.item as Track)?.album?.images[0]?.url} />
+        <img className={styles.icon} src={(currentTrack?.item as Track)?.album?.images[0]?.url} />
         <div className={styles.infoText}>
-          <p>{props?.item?.name}</p>
-          <p>{(props?.item as Track)?.artists[0]?.name}</p>
+          <p>{currentTrack?.item?.name}</p>
+          <p>{(currentTrack?.item as Track)?.artists[0]?.name}</p>
         </div>
       </button>
       <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
-      <button className={styles.button} type="button" onClick={stop}><PauseCircleFilled className={styles.icon} /></button>
-      <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
+      {currentTrack?.is_playing && (
+        <button className={styles.button} type="button" onClick={stop}><PauseCircleFilled className={styles.icon} /></button>
+      )}
+      {!currentTrack?.is_playing && (
+        <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
+      )}
       <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
       <div className={styles.bar}></div>
     </div >

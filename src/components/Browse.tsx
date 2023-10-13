@@ -6,6 +6,7 @@ import { search } from "@/API";
 import { FormEvent, useRef, useState } from "react";
 import ViewQueue from "./ViewQueue";
 import { PartialSearchResult } from "@spotify/web-api-ts-sdk";
+import { HomeFilled, SignalFilled } from "@ant-design/icons";
 
 export interface pickProp {
   props: Pick<PartialSearchResult, "albums" | "playlists" | "tracks">;
@@ -13,12 +14,12 @@ export interface pickProp {
 
 export default function Browse() {
   const [result, setResult] = useState<Pick<PartialSearchResult, "albums" | "playlists" | "tracks">>();
-  const [showSearch, setShowSearch] = useState<boolean>(true);
+  const [tab, setTab] = useState<number>(0);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setShowSearch(true);
+    setTab(2);
 
     const formData = new FormData(e.currentTarget);
     const searchTerm: string = formData.get("searchTerm") as string;
@@ -30,23 +31,29 @@ export default function Browse() {
     setResult(data);
   }
 
+  // turn in to hamburger menu if adding more tabs?
+
   return (
     <div className={styles.browseContainer}>
       <div className={styles.tab}>
-        <button className={styles.tabButton} type="button" onClick={() => setShowSearch(false)}>Queue</button>
-        <button className={styles.tabButton} type="button" onClick={() => setShowSearch(true)}>Search</button>
+        <button className={styles.tabButton} type="button" onClick={() => setTab(0)}><HomeFilled /></button>
+        <button className={styles.tabButton} type="button" onClick={() => setTab(1)}><SignalFilled /></button>
+        {/* <button className={styles.tabButton} type="button" onClick={() => setShowSearch(true)}>Search</button> */}
         <form onSubmit={onSubmit} className={styles.container}>
           <div className={styles.searchContainer}>
             <SearchOutlined className={`${styles.search} ${styles.icon}`} />
             <input type="text" name="searchTerm" className={styles.search} placeholder='Search' />
           </div>
-          <button type="submit" className={styles.button}>Search</button>
+          <button type="submit" className={styles.button} style={{ display: "none" }}>Search</button>
         </form>
       </div>
-      {!showSearch && (
-        <ViewQueue show={!showSearch} />
+      {tab === 0 && (
+        <h1>This is a home page!</h1>
       )}
-      {showSearch && (
+      {tab === 1 && (
+        <ViewQueue show={tab === 1} />
+      )}
+      {tab === 2 && (
         <View props={result as Pick<PartialSearchResult, "albums" | "playlists" | "tracks">} />
       )}
     </div>

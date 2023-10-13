@@ -9,6 +9,7 @@ import { pickProp } from './Browse';
 export interface trackProp {
   track: Track;
   func: (uri: string) => void;
+  showButton?: boolean;
 }
 
 export interface playlistProp {

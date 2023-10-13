@@ -1,7 +1,7 @@
 import styles from './page.module.css'
 import Browse from '@/components/Browse'
 import Auth from '@/components/Auth';
-import PlayerWrapper from '@/components/PlayerWrapper';
+import Player from '@/components/Player';
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
         <h1>Music server</h1>
       </div>
       <Browse />
-      <PlayerWrapper />
+      <Player />
       <Auth />
     </main >
   )

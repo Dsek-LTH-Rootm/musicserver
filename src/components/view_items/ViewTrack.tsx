@@ -4,10 +4,12 @@ import { PlayCircleFilled } from "@ant-design/icons";
 import { getArtist, getTime, trackProp } from "../View";
 import { SimplifiedArtist } from "@spotify/web-api-ts-sdk";
 
-export default function ViewTrack({ track, func }: trackProp) {
+export default function ViewTrack({ track, func, showButton }: trackProp) {
   return (
     <div className={styles.smallContainer}>
-      <button className={styles.button} onClick={() => func(track?.uri)}><PlayCircleFilled /></button>
+      {showButton !== false && (
+        <button className={styles.button} onClick={() => func(track?.uri)}><PlayCircleFilled /></button>
+      )}
       <a className={styles.cover} target="_blank" href={track?.album?.external_urls?.spotify}><img src={track?.album?.images[0]?.url} className={styles.cover} /></a>
       <a href={track?.external_urls?.spotify} target="_blank" className={styles.title}>{track?.name}</a>
       <div className={styles.artist}>

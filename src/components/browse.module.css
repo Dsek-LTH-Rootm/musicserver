@@ -14,10 +14,12 @@
   flex-direction: row;
   align-self: flex-end;
   justify-content: flex-end;
+  margin-right: 50px;
+  margin-left: 10px;
 }
 
 .searchContainer {
-  width: 200px;
+  width: 300px;
   height: 2em;
   font-size: 1.5em;
   display: flex;
@@ -96,6 +98,8 @@
   font-size: 1.5em;
   margin-left: 30px;
   cursor: pointer;
+  font-size: 2em;
+  min-width: 50px;
 }
 
 .tabButton:hover {
@@ -112,6 +116,10 @@
   .searchContainer:focus-within,
   .searchContainer {
     width: 100%;
+  }
+
+  .container {
+    margin-right: 0px;
   }
 
   .button {
