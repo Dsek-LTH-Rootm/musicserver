@@ -70,11 +70,13 @@ export async function pause() {
 
 async function activateDevice() {
   const response = await sdk?.player?.getAvailableDevices();
-  response.devices.forEach(element => {
+  console.log(response);
+  response.devices.forEach(async element => {
     const devices = [
       element.id
     ];
-    sdk.player.transferPlayback(devices as string[], true);
+    const responseActivation = await sdk?.player?.transferPlayback(devices as string[], true);
+    console.log(responseActivation);
     console.log("Found device " + element.id);
     active_device = element.id;
   });

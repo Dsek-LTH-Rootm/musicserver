@@ -3,8 +3,9 @@ import { PlaylistBase, simplifiedArtist } from '@/types';
 import { PlayCircleFilled } from '@ant-design/icons';
 import { addToQueue, play } from '@/API';
 import ViewTrack from './view_items/ViewTrack';
-import { PartialSearchResult, Playlist, SimplifiedArtist, Track } from '@spotify/web-api-ts-sdk';
+import { Playlist, SimplifiedArtist, Track } from '@spotify/web-api-ts-sdk';
 import { pickProp } from './Browse';
+import Image from 'next/image';
 
 export interface trackProp {
   track: Track;
@@ -18,12 +19,6 @@ export interface playlistProp {
 }
 
 export default function View({ props }: pickProp) {
-  // const [result, setResult] = useState<Pick<PartialSearchResult, "albums" | "playlists" | "tracks">>();
-
-  // useEffect(() => {
-  //   setResult(props);
-  // }, [props]);
-
   // move to separate components later
 
   const resume = (context_uri: string) => {
@@ -43,7 +38,7 @@ export default function View({ props }: pickProp) {
         {props?.playlists?.items.map((playlist: PlaylistBase, index: number) =>
           <div key={index} className={styles.smallContainer}>
             <button className={styles.button} onClick={() => resume(playlist.uri)}><PlayCircleFilled /></button>
-            <a className={styles.cover} target="_blank" href={playlist.external_urls?.spotify}><img src={playlist.images[0]?.url} className={styles.cover} /></a>
+            <a className={styles.cover} target="_blank" href={playlist.external_urls?.spotify}><Image alt="Playlist's cover art" src={playlist.images[0]?.url} className={styles.cover} /></a>
             <a href={playlist.external_urls?.spotify} target="_blank" className={styles.title}>{playlist.name}</a>
             <div className={styles.artist}>
               <a href={playlist.owner?.external_urls?.spotify} target="_blank">{playlist.owner?.display_name}</a>
