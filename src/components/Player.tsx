@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export default function Player() {
+  const [playing, setPlaying] = useState<boolean>(false);
   const [infoHide, setInfoHide] = useState<boolean>(true);
   const [currentTrack, setCurrentTrack] = useState<PlaybackState>();
 
@@ -15,6 +16,7 @@ export default function Player() {
       const data = await getCurrentStatus();
       if (data !== undefined) {
         setCurrentTrack(data);
+        setPlaying(data.is_playing);
       }
     }, 5000);
   }, []);
@@ -24,10 +26,12 @@ export default function Player() {
   }
 
   const resume = () => {
+    setPlaying(true);
     play();
   }
 
   const stop = () => {
+    setPlaying(false);
     pause();
   }
 
@@ -49,10 +53,10 @@ export default function Player() {
         </div>
       </button>
       <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
-      {currentTrack?.is_playing && (
+      {playing && (
         <button className={styles.button} type="button" onClick={stop}><PauseCircleFilled className={styles.icon} /></button>
       )}
-      {!currentTrack?.is_playing && (
+      {!playing && (
         <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
       )}
       <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>

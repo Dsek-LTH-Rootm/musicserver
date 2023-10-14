@@ -106,6 +106,7 @@ export async function getAccessToken() {
 export async function getCurrentStatus() {
   try {
     const response = await sdk?.player?.getCurrentlyPlayingTrack();
+    revalidatePath("/");
     return response;
   } catch (error) {
     activateDevice();
