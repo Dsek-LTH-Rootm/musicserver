@@ -19,12 +19,11 @@
 }
 
 .searchContainer {
-  width: 300px;
-  height: 2em;
-  font-size: 1.5em;
+  width: auto;
+  height: 50px;
+  font-size: 1.4em;
   display: flex;
   flex-direction: row;
-  transition: ease 0.2s all;
   border: 2px solid rgb(87, 87, 87);
   border-radius: 10px;
   box-sizing: border-box;
@@ -39,7 +38,7 @@
   align-items: center;
   font-size: 1em;
   height: 100%;
-  width: 100%;
+  width: 100px;
   padding-left: 10px;
   padding-right: 10px;
   background-color: white;
@@ -48,15 +47,25 @@
   background-color: black;
   outline: none;
   color: white;
+  transition: ease 0.3s all;
 }
 
 .icon {
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 100%;
+  font-size: 1em;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: white;
+  background-color: black;
   width: auto;
 }
 
-.searchContainer:focus-within,
-.searchContainer:active {
-  width: 30%;
+.search:focus,
+.search:active {
+  width: 250px;
   transition: ease 0.3s all;
 }
 
@@ -112,9 +121,9 @@
 
 @media screen and (max-width: 600px) {
 
-  .searchContainer:active,
-  .searchContainer:focus-within,
-  .searchContainer {
+  .search:active,
+  .search:focus-within,
+  .search {
     width: 100%;
   }
 

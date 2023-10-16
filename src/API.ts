@@ -1,12 +1,16 @@
 "use server";
-import { SpotifyApi, AccessToken } from '@spotify/web-api-ts-sdk';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { useRouter } from 'next/navigation';
+import { SpotifyApi, AccessToken, PlaybackState } from '@spotify/web-api-ts-sdk';
+import { revalidatePath } from 'next/cache';
 
 var sdk: SpotifyApi;
 var active_device: string | null;
 
 export async function updateAccessToken(accessToken: AccessToken) {
+  if (accessToken.access_token === 'emptyAccessToken') {
+    console.log("Access token empty");
+    return;
+  }
+  console.log(accessToken);
   sdk = SpotifyApi.withAccessToken("f6c2c310440440ada66232669bb965b6", accessToken);
 }
 
@@ -72,11 +76,11 @@ async function activateDevice() {
   const response = await sdk?.player?.getAvailableDevices();
   console.log(response);
   response.devices.forEach(async element => {
-    const devices = [
-      element.id
+    const device_ids = [
+      element?.id
     ];
-    const responseActivation = await sdk?.player?.transferPlayback(devices as string[], true);
-    console.log(responseActivation);
+    const play = true;
+    await sdk?.player?.transferPlayback(device_ids as string[], true);
     console.log("Found device " + element.id);
     active_device = element.id;
   });
@@ -103,11 +107,22 @@ export async function getAccessToken() {
   }
 }
 
+// stop clients from making individual requests and let the server do 1 request for all clients every x seconds
+var playback: PlaybackState;
+var timeSinceFetch: number = 0;
+
 export async function getCurrentStatus() {
   try {
-    const response = await sdk?.player?.getCurrentlyPlayingTrack();
-    revalidatePath("/");
-    return response;
+    // Date.now() returns milliseconds
+    if (Date.now() - timeSinceFetch > 5000) {
+      playback = await sdk?.player?.getCurrentlyPlayingTrack();
+      if (playback === null) {
+        activateDevice();
+      }
+      timeSinceFetch = Date.now();
+    }
+
+    return playback;
   } catch (error) {
     activateDevice();
   }

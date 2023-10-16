@@ -41,7 +41,7 @@ export default function Browse() {
         {/* <button className={styles.tabButton} type="button" onClick={() => setShowSearch(true)}>Search</button> */}
         <form onSubmit={onSubmit} className={styles.container}>
           <div className={styles.searchContainer}>
-            <SearchOutlined className={`${styles.search} ${styles.icon}`} />
+            <SearchOutlined className={styles.icon} />
             <input type="text" name="searchTerm" className={styles.search} placeholder='Search' />
           </div>
           <button type="submit" className={styles.button} style={{ display: "none" }}>Search</button>

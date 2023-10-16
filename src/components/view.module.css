@@ -7,7 +7,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 50px;
+  height: 55px;
   width: 100%;
   background-color: black;
   padding: 5px;
@@ -30,8 +30,8 @@
   margin-right: 20px;
 }
 
-.artist:hover,
-.title:hover {
+.title:hover,
+.artistlink:hover {
   text-decoration: underline;
 }
 
@@ -41,6 +41,7 @@
 }
 
 .cover {
+  position: relative;
   height: 100%;
   margin-right: 10px;
   aspect-ratio: 1 / 1;

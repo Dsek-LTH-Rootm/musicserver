@@ -48,6 +48,7 @@
 }
 
 .info {
+  position: relative;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -59,12 +60,15 @@
   background-color: black;
   border: 0px transparent;
   outline: none;
+  padding-right: 10px;
 }
 
 .infoHide {
+  position: relative;
   cursor: pointer;
   padding-left: 10px;
   width: 20%;
+  max-width: 300px;
   display: flex;
   flex-direction: row;
   background-color: black;
@@ -91,6 +95,10 @@
   align-self: center;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 @media only screen and (max-width: 700px) {

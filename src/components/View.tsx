@@ -38,7 +38,7 @@ export default function View({ props }: pickProp) {
         {props?.playlists?.items.map((playlist: PlaylistBase, index: number) =>
           <div key={index} className={styles.smallContainer}>
             <button className={styles.button} onClick={() => resume(playlist.uri)}><PlayCircleFilled /></button>
-            <a className={styles.cover} target="_blank" href={playlist.external_urls?.spotify}><Image alt="Playlist's cover art" src={playlist.images[0]?.url} className={styles.cover} /></a>
+            <a className={styles.cover} target="_blank" href={playlist.external_urls?.spotify}><Image fill={true} alt="Playlist's cover art" src={playlist.images[0]?.url} className={styles.cover} /></a>
             <a href={playlist.external_urls?.spotify} target="_blank" className={styles.title}>{playlist.name}</a>
             <div className={styles.artist}>
               <a href={playlist.owner?.external_urls?.spotify} target="_blank">{playlist.owner?.display_name}</a>
@@ -50,22 +50,4 @@ export default function View({ props }: pickProp) {
       </div>
     </div>
   );
-}
-
-export function getTime(originalTime: number) {
-  let minutes = Math.floor((originalTime / (1000 * 60)) % 60);
-  let seconds = Math.floor((originalTime / 1000) % 60);
-
-  let minutesString = minutes < 10 ? "0" + minutes : minutes;
-  let secondsString = seconds < 10 ? "0" + seconds : seconds;
-
-  return minutesString + ":" + secondsString;
-}
-
-export function getArtist(artist: SimplifiedArtist, index: number, artists: SimplifiedArtist[]) {
-  if (index == artists.length - 1) {
-    return " " + artist.name;
-  } else {
-    return " " + artist.name + "-";
-  }
 }
