@@ -1,6 +1,14 @@
 .container {
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
+}
+
+.rowContainer {
+  background-color: #222;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid black;
 }
 
 .smallContainer {
@@ -9,10 +17,14 @@
   align-items: center;
   height: 55px;
   width: 100%;
-  background-color: black;
   padding: 5px;
-  border: 1px solid gray;
   color: white;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.smallContainer:hover {
+  background-color: #333;
 }
 
 .title {
@@ -66,8 +78,48 @@
   transform: scale(0.9);
 }
 
-.rowTitle {
+.rowButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.rowButton {
+  border: 0px transparent;
   color: white;
+  font-size: 1.5em;
+  height: 100%;
+  margin-left: 20px;
+  padding: 5px;
+  background-color: transparent;
+  text-align: center;
+}
+
+.rowButton:hover {
+  color: gray;
+  cursor: pointer;
+}
+
+.rowButton:active {
+  transform: scale(0.9);
+}
+
+.rowTitle {
+  font-size: 2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  color: white;
+}
+
+.loading {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-size: 10vw;
 }
 
 @media only screen and (max-width: 700px) {

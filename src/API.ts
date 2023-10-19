@@ -11,7 +11,7 @@ export async function updateAccessToken(accessToken: AccessToken) {
     return;
   }
   console.log(accessToken);
-  sdk = SpotifyApi.withAccessToken("f6c2c310440440ada66232669bb965b6", accessToken);
+  sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID as string, accessToken);
 }
 
 export async function search(query: string) {
@@ -114,12 +114,13 @@ var timeSinceFetch: number = 0;
 export async function getCurrentStatus() {
   try {
     // Date.now() returns milliseconds
-    if (Date.now() - timeSinceFetch > 5000) {
+    if (Date.now() - timeSinceFetch > 5000 || playback === undefined) {
       playback = await sdk?.player?.getCurrentlyPlayingTrack();
       if (playback === null) {
         activateDevice();
       }
       timeSinceFetch = Date.now();
+      revalidatePath("/");
     }
 
     return playback;

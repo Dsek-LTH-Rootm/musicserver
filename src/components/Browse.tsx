@@ -1,9 +1,10 @@
 'use client'
-import { SearchOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import styles from './browse.module.css';
+import styles2 from './view.module.css';
 import View from "./View";
 import { search } from "@/API";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import ViewQueue from "./ViewQueue";
 import { PartialSearchResult } from "@spotify/web-api-ts-sdk";
 import { HomeFilled, SignalFilled } from "@ant-design/icons";
@@ -15,10 +16,12 @@ export interface pickProp {
 export default function Browse() {
   const [result, setResult] = useState<Pick<PartialSearchResult, "albums" | "playlists" | "tracks">>();
   const [tab, setTab] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    setLoading(true);
     setTab(2);
 
     const formData = new FormData(e.currentTarget);
@@ -29,6 +32,7 @@ export default function Browse() {
 
     const data: any = await search(searchTerm);
     setResult(data);
+    setLoading(false);
   }
 
   // turn in to hamburger menu if adding more tabs?
@@ -54,7 +58,16 @@ export default function Browse() {
         <ViewQueue show={tab === 1} />
       )}
       {tab === 2 && (
-        <View props={result as Pick<PartialSearchResult, "albums" | "playlists" | "tracks">} />
+        <>
+          {loading && (
+            <div className={styles2.loading}>
+              <LoadingOutlined />
+            </div>
+          )}
+          {!loading && (
+            <View props={result as Pick<PartialSearchResult, "albums" | "playlists" | "tracks">} />
+          )}
+        </>
       )}
     </div>
   );

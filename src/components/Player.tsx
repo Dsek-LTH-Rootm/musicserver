@@ -18,10 +18,11 @@ export default function Player() {
         setCurrentTrack(data);
         setPlaying(data?.is_playing);
       }
-    }, 2500);
+    }, 6000);
   }, []);
 
   const back = () => {
+    setPlaying(true);
     skipBack();
   }
 
@@ -36,6 +37,7 @@ export default function Player() {
   }
 
   const forward = () => {
+    setPlaying(true);
     skipNext();
   }
 
