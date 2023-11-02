@@ -1,16 +1,20 @@
 "use server";
 import { SpotifyApi, AccessToken, PlaybackState } from '@spotify/web-api-ts-sdk';
 import { revalidatePath } from 'next/cache';
+import { headers } from "next/headers";
 
 var sdk: SpotifyApi;
 var active_device: string | null;
+
+export async function getSDK() {
+  return sdk;
+}
 
 export async function updateAccessToken(accessToken: AccessToken) {
   if (accessToken.access_token === 'emptyAccessToken') {
     console.log("Access token empty");
     return;
   }
-  console.log(accessToken);
   sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID as string, accessToken);
 }
 
@@ -90,9 +94,9 @@ async function activateDevice() {
 // https://github.com/vercel/next.js/discussions/54075
 export async function getQueue() {
   try {
+    headers();
     const response = await sdk?.player?.getUsersQueue();
     console.log("Got queue");
-    revalidatePath("/"); // revalidate to renew cache
     return response;
   } catch (error) {
     console.log(error);
@@ -113,6 +117,7 @@ var timeSinceFetch: number = 0;
 
 export async function getCurrentStatus() {
   try {
+    headers();
     // Date.now() returns milliseconds
     if (Date.now() - timeSinceFetch > 5000 || playback === undefined) {
       playback = await sdk?.player?.getCurrentlyPlayingTrack();
@@ -120,11 +125,11 @@ export async function getCurrentStatus() {
         activateDevice();
       }
       timeSinceFetch = Date.now();
-      revalidatePath("/");
     }
 
     return playback;
   } catch (error) {
-    activateDevice();
+    console.log("Device not activated");
+    // activateDevice();
   }
 }

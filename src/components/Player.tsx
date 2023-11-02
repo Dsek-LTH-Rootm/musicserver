@@ -12,14 +12,17 @@ export default function Player() {
   const [currentTrack, setCurrentTrack] = useState<PlaybackState>();
 
   useEffect(() => {
-    setInterval(async () => {
-      const data = await getCurrentStatus();
-      if (data !== undefined) {
-        setCurrentTrack(data);
-        setPlaying(data?.is_playing);
-      }
-    }, 6000);
+    getCurrentlyPlaying();
+    setInterval(getCurrentlyPlaying, 6000);
   }, []);
+
+  const getCurrentlyPlaying = async () => {
+    const data = await getCurrentStatus();
+    if (data !== undefined) {
+      setCurrentTrack(data);
+      setPlaying(data?.is_playing);
+    }
+  }
 
   const back = () => {
     setPlaying(true);
