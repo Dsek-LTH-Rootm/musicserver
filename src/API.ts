@@ -16,6 +16,10 @@ export async function updateAccessToken(accessToken: AccessToken) {
     return;
   }
   sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID as string, accessToken);
+
+  setInterval(() => {
+    getCurrentStatus();
+  }, 1000 * 60);
 }
 
 export async function search(query: string) {
