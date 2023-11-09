@@ -141,9 +141,17 @@ export async function getCurrentStatus() {
 
 export async function setVolume(value: number) {
   try {
-    console.log(value);
     execSync(`pactl set-sink-volume @DEFAULT_SINK@ ${value}%`);
   } catch (error) {
     console.log("Volume set failed");
   }
-} 
+}
+
+export async function getVolume() {
+  try {
+    const result = execSync("pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \\([0-9][0-9]*\\)%.*,\\1,'").toString();
+    return result;
+  } catch (error) {
+    console.log("Couldn't get volume");
+  }
+}

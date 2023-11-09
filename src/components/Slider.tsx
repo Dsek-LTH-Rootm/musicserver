@@ -1,11 +1,20 @@
 "use client";
 
-import { setVolume } from "@/API";
-import { ChangeEvent, useState } from "react";
+import { getVolume, setVolume } from "@/API";
+import { ChangeEvent, useEffect, useState } from "react";
 import styles from './player.module.css';
 
 export default function Slider() {
   const [value, setValue] = useState<number>(100);
+
+  useEffect(() => {
+    getValue();
+  }, []);
+
+  const getValue = async () => {
+    const v = await getVolume();
+    setValue(Number(v as string));
+  }
 
   const valueChanged = async (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.valueAsNumber);
