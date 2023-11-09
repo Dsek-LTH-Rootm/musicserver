@@ -6,11 +6,10 @@ import styles from './player.module.css';
 
 export default function Slider() {
   const [value, setValue] = useState<number>(100);
-  const [time, setTime] = useState<NodeJS.Timeout>();
 
   const valueChanged = async (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.valueAsNumber);
-    setVolume(value);
+    setVolume(event.target.valueAsNumber);
   }
 
   return (
