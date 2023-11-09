@@ -1,5 +1,6 @@
 "use server";
 import { SpotifyApi, AccessToken, PlaybackState } from '@spotify/web-api-ts-sdk';
+import { exec, execSync } from 'child_process';
 import { revalidatePath } from 'next/cache';
 import { headers } from "next/headers";
 
@@ -137,3 +138,12 @@ export async function getCurrentStatus() {
     // activateDevice();
   }
 }
+
+export async function setVolume(value: number) {
+  try {
+    console.log(value);
+    execSync(`pactl set-sink-volume @DEFAULT_SINK@ ${value}%`);
+  } catch (error) {
+    console.log("Volume set failed");
+  }
+} 

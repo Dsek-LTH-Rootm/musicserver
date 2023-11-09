@@ -5,6 +5,7 @@ import { getCurrentStatus, pause, play, skipBack, skipNext } from '@/API';
 import { PlaybackState, Track } from '@spotify/web-api-ts-sdk';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Slider from './Slider';
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -67,7 +68,7 @@ export default function Player() {
         <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
       )}
       <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
-      <div className={styles.bar}></div>
+      <Slider />
     </div >
   );
 }
