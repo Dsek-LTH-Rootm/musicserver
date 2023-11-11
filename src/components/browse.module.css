@@ -38,7 +38,7 @@
   align-items: center;
   font-size: 1em;
   height: 100%;
-  width: 100px;
+  width: 500px;
   padding-left: 10px;
   padding-right: 10px;
   background-color: white;
@@ -63,10 +63,18 @@
   width: auto;
 }
 
+.progress {
+  align-self: center; 
+  width: 100%; 
+  margin-right: 10px; 
+  border: 1px solid #222; 
+  height: 10px; 
+  border-radius: 10px; 
+  overflow: hidden;
+}
+
 .search:focus,
 .search:active {
-  width: 250px;
-  transition: ease 0.3s all;
 }
 
 .button {
@@ -119,11 +127,12 @@
   transform: scale(0.9);
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
 
   .search:active,
   .search:focus-within,
-  .search {
+  .search,
+  .searchContainer {
     width: 100%;
   }
 
@@ -137,5 +146,9 @@
 
   .tabButton {
     margin-left: 5px;
+  }
+
+  .progress {
+    display: none;
   }
 }

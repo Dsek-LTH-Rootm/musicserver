@@ -6,6 +6,7 @@ import { PlaybackState, Track } from '@spotify/web-api-ts-sdk';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Slider from './Slider';
+import Progress from './Progress';
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -14,7 +15,7 @@ export default function Player() {
 
   useEffect(() => {
     getCurrentlyPlaying();
-    setInterval(getCurrentlyPlaying, 6000);
+    setInterval(getCurrentlyPlaying, 500);
   }, []);
 
   const getCurrentlyPlaying = async () => {
@@ -60,14 +61,17 @@ export default function Player() {
           <p><a href={(currentTrack?.item as Track)?.artists[0]?.external_urls?.spotify} className={styles.link}>{(currentTrack?.item as Track)?.artists[0]?.name}</a></p>
         </div>
       </button>
-      <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
-      {playing && (
-        <button className={styles.button} type="button" onClick={stop}><PauseCircleFilled className={styles.icon} /></button>
-      )}
-      {!playing && (
-        <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
-      )}
-      <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
+      <div className={styles.buttonContainer}>
+        <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
+        {playing && (
+          <button className={styles.button} type="button" onClick={stop}><PauseCircleFilled className={styles.icon} /></button>
+        )}
+        {!playing && (
+          <button className={styles.button} type="button" onClick={resume}><PlayCircleFilled className={styles.icon} /></button>
+        )}
+        <button className={styles.button} type="button" onClick={forward}><RightOutlined className={`${styles.icon} ${styles.small}`} /></button>
+      </div>
+      <Progress playbackState={currentTrack as PlaybackState}/>
       <Slider />
     </div >
   );
