@@ -62,10 +62,11 @@ export async function skipBack() {
 
 export async function play(context_uri?: string) {
   try {
-    if (context_uri) {
+    await sdk.player.startResumePlayback(active_device!, context_uri);
+    if (context_uri) { // need to turn off and on shuffle for spotify to shuffle
+      await sdk?.player?.togglePlaybackShuffle(false);
       await sdk?.player?.togglePlaybackShuffle(true);
     }
-    await sdk.player.startResumePlayback(active_device!, context_uri);
     console.log("Started playing");
   } catch (error) {
     activateDevice();
