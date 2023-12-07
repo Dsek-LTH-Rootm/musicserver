@@ -54,7 +54,7 @@ export default function Browse() {
         </form>
       </div>
       {tab === 0 && (
-        <h1>This is a home page!</h1>
+        <p></p>
       )}
       {tab === 1 && (
         <ViewQueue show={tab === 1} />

@@ -30,6 +30,10 @@
 .title {
   font-size: 1.1em;
   margin-right: 20px;
+  width: 30%;
+  /* padding-left: 10px;
+  border-left: 1px solid gray; */
+  overflow: hidden;
 }
 
 .artist {
@@ -38,8 +42,11 @@
   right: 0px;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
   margin-right: 20px;
+  width: 30%;
+  padding-left: 10px;
+  overflow: hidden;
 }
 
 .title:hover,
@@ -49,7 +56,10 @@
 
 .duration {
   right: 0px;
-  text-align: right;
+  /* text-align: right; */
+  width: 40%;
+  padding-left: 10px;
+  overflow: hidden;
 }
 
 .cover {
