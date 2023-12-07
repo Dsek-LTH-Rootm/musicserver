@@ -3,6 +3,7 @@
 import { getVolume, setVolume } from "@/API";
 import { ChangeEvent, useEffect, useState } from "react";
 import styles from './player.module.css';
+import { SoundOutlined } from "@ant-design/icons";
 
 export default function Slider() {
   const [value, setValue] = useState<number>(100);
@@ -22,8 +23,9 @@ export default function Slider() {
   }
 
   return (
-    <div>
-      <input
+    <div style={{alignSelf: "center", height: 30, display: "flex", justifyContent: "center", marginLeft: "auto", marginRight: 10}}>
+      <SoundOutlined className={styles.icon} style={{fontSize: 25}}/>
+      <input 
         type="range"
         min={0}
         max={100}

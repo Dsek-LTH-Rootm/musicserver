@@ -22,14 +22,15 @@ export default function Browse() {
     e.preventDefault();
 
     setLoading(true);
-    setTab(2);
-
+    
     const formData = new FormData(e.currentTarget);
     const searchTerm: string = formData.get("searchTerm") as string;
     if (!searchTerm || searchTerm === "") {
+      setLoading(false);
       return;
     }
-
+    
+    setTab(2);
     const data: any = await search(searchTerm);
     setResult(data);
     setLoading(false);
@@ -45,10 +46,11 @@ export default function Browse() {
         {/* <button className={styles.tabButton} type="button" onClick={() => setShowSearch(true)}>Search</button> */}
         <form onSubmit={onSubmit} className={styles.container}>
           <div className={styles.searchContainer}>
-            <SearchOutlined className={styles.icon} />
             <input type="text" name="searchTerm" className={styles.search} placeholder='Search' />
+            <button type="submit" className={styles.button}>
+              <SearchOutlined className={styles.icon} />
+            </button>
           </div>
-          <button type="submit" className={styles.button} style={{ display: "none" }}>Search</button>
         </form>
       </div>
       {tab === 0 && (
