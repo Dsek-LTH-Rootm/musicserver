@@ -6,7 +6,7 @@ import { SimplifiedAlbum, Track } from '@spotify/web-api-ts-sdk';
 import { pickProp } from './Browse';
 import ViewPlaylist from './view_items/ViewPlaylist';
 import ViewAlbum from './view_items/ViewAlbum';
-import { useState } from 'react';
+import { toast } from './toast.js';
 
 export interface trackProp {
   track: Track;
@@ -25,12 +25,23 @@ export interface albumProp {
 }
 
 export default function View({ props }: pickProp) {
+
+  const addToQueueHandler = (uri: string) => {
+    toast.add("Track added to queue");
+    addToQueue(uri);
+  }
+
+  const playHandler = (uri: string) => {
+    toast.add("Removed queue and starts playing");
+    play(uri);
+  } 
+
   return (
     <div className={styles.container}>
       <div className={styles.rowContainer}>
         <h3 className={styles.rowTitle}>Tracks</h3>
         {props?.tracks?.items.map((track: Track, index: number) =>
-          <ViewTrack key={index} track={track} func={addToQueue} />
+          <ViewTrack key={index} track={track} func={addToQueueHandler} />
         )}
       </div>
       <div className={styles.rowContainer}>
