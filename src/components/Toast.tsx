@@ -2,11 +2,18 @@
 
 import styles from './toast.module.css';
 
-export default function Toast({message}: {message: string}) {
+export function ToastContainer() {
+  return (
+    <div id="toast-container">
+    </div>
+  )
+} 
+
+export function Toast({message}: {message: string}) {
 
   // if (!message) {
     return (
-      <div className={styles.container} id="toast-container">
+      <div className={styles.container}>
         <p className={styles.message}>{message}</p>
       </div>
     )
