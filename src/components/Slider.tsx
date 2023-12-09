@@ -23,7 +23,7 @@ export default function Slider() {
   }
 
   return (
-    <div style={{alignSelf: "center", height: 30, display: "flex", justifyContent: "center", marginLeft: "auto", marginRight: 10}}>
+    <div className={styles.slider} >
       <SoundOutlined className={styles.icon} style={{fontSize: 25}}/>
       <input 
         type="range"

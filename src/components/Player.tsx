@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Slider from './Slider';
 import Progress from './Progress';
+import { toast } from './toast.js';
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -29,21 +30,25 @@ export default function Player() {
   const back = () => {
     setPlaying(true);
     skipBack();
+    toast.add("Skipped to previous song");
   }
 
   const resume = () => {
     setPlaying(true);
     play();
+    toast.add("Started playing")
   }
 
   const stop = () => {
     setPlaying(false);
     pause();
+    toast.add("Stopped playing");
   }
 
   const forward = () => {
     setPlaying(true);
     skipNext();
+    toast.add("Skipped to next song");
   }
 
   const hide = () => {
