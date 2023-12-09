@@ -1,5 +1,5 @@
-import Toast from './Toast.tsx';
-import { render } from 'react-dom';
+import { Toast } from './Toast.tsx';
+import { render, unmountComponentAtNode } from 'react-dom';
 
 export const toast = {
   currentToast: false,
@@ -51,6 +51,6 @@ export const toast = {
     , document.getElementById("toast-container"))
 
     toast.currentToast = true
-    toast.timeout = setTimeout(toast.remove, duration * 10000)
+    toast.timeout = setTimeout(toast.remove, duration * 1000)
   }
 }

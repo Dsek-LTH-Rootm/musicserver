@@ -2,6 +2,7 @@ import styles from './page.module.css'
 import Browse from '@/components/Browse'
 import Auth from '@/components/Auth';
 import Player from '@/components/Player';
+import { ToastContainer } from '@/components/Toast';
 
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <Browse />
       <Player />
       <Auth />
+      <ToastContainer />
     </main >
   )
 }

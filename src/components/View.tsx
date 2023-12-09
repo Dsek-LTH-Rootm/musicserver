@@ -32,7 +32,7 @@ export default function View({ props }: pickProp) {
   }
 
   const playHandler = (uri: string) => {
-    toast.add("Removed queue and starts playing");
+    toast.add("Cleared queue and started playing");
     play(uri);
   } 
 
@@ -47,13 +47,13 @@ export default function View({ props }: pickProp) {
       <div className={styles.rowContainer}>
         <h3 className={styles.rowTitle}>Playlists</h3>
         {props?.playlists?.items.map((playlist: PlaylistBase, index: number) =>
-          <ViewPlaylist key={index} playlist={playlist} func={play} />
+          <ViewPlaylist key={index} playlist={playlist} func={playHandler} />
         )}
       </div>
       <div className={styles.rowContainer}>
         <h3 className={styles.rowTitle}>Albums</h3>
         {props?.albums?.items.map((album: SimplifiedAlbum, index: number) =>
-          <ViewAlbum key={index} album={album} func={play} />
+          <ViewAlbum key={index} album={album} func={playHandler} />
         )}
       </div>
     </div>
