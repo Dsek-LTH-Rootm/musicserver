@@ -3,8 +3,7 @@ import Browse from '@/components/Browse'
 import Auth from '@/components/Auth';
 import Player from '@/components/Player';
 import Image from 'next/image';
-import { ToastContainer } from '@/components/Toast';
-
+import { ToastContainer } from '@/components/ToastContainer';
 
 export default function Home() {
   return (

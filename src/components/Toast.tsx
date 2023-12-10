@@ -1,19 +1,60 @@
-"use client";
+import React from 'react';
+import { unmountComponentAtNode } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import { Toast } from './ToastContainer';
 
-import styles from './toast.module.css';
+export class toast extends React.Component {
+  static currentToast: boolean;
+  static timeout: ReturnType<typeof setTimeout> | null;
 
-export function ToastContainer() {
-  return (
-    <div id="toast-container" style={{position: "absolute", width: "100%", display: "flex", justifyContent: "center"}}>
-    </div>
-  )
-} 
+  currentToast = false;
+  timeout = null;
+  
+  static remove() {
+    const toastContainer = createRoot(document.getElementById("toast-container") as HTMLElement);
+    toastContainer.unmount();
+    // unmountComponentAtNode(document.getElementById("toast-container") as HTMLElement)
+    toast.currentToast = false
+    if (toast.timeout) {
+      clearTimeout(toast.timeout)
+      toast.timeout = null
+    }
+  }
 
-export function Toast({message}: {message: string}) {
+  static add(message: string, options: any = null) {
+    let duration = 5
+    let color
 
-  return (
-    <div className={styles.container}>
-      <p className={styles.message}>{message}</p>
-    </div>
-  )
+    if (options) {
+      if (options.duration) {
+        duration = options.duration
+      }
+  
+      if (options.type === "info") {
+        color = "blue"
+      }
+  
+      if (options.type === "success") {
+        color = "green"
+      }
+  
+      if (options.type === "error") {
+        color = "red"
+      }
+  
+      if (options.type === "warn") {
+        color = "orange"
+      }
+    }
+
+    if (toast.currentToast) {
+      toast.remove()
+    }
+
+    const toastContainer = createRoot(document.getElementById("toast-container") as HTMLElement);
+    toastContainer.render(<Toast message={message}/>);
+
+    toast.currentToast = true;
+    toast.timeout = setTimeout(toast.remove, duration * 1000);
+  }
 }

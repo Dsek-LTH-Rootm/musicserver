@@ -21,6 +21,7 @@
   font-size: large;
   text-align: center;
   align-self: center;
+  color: black;
 }
 
 @keyframes toast-animation {
