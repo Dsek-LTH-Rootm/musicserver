@@ -2,8 +2,7 @@ import styles from './page.module.css'
 import Browse from '@/components/Browse'
 import Auth from '@/components/Auth';
 import Player from '@/components/Player';
-import { ToastContainer } from '@/components/Toast';
-
+import { ToastContainer } from '@/components/ToastContainer';
 
 export default function Home() {
   return (
