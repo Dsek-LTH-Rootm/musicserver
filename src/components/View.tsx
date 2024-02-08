@@ -6,7 +6,7 @@ import { SimplifiedAlbum, Track } from '@spotify/web-api-ts-sdk';
 import { pickProp } from './Browse';
 import ViewPlaylist from './view_items/ViewPlaylist';
 import ViewAlbum from './view_items/ViewAlbum';
-import { toast } from './toast.js';
+import { toast } from './toast.tsx';
 
 export interface trackProp {
   track: Track;
