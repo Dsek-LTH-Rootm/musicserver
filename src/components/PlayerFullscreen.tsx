@@ -26,7 +26,6 @@ export default function PlayerFullscreen() {
       {currentTrack && (
         <>
           <div className={styles.container} >
-            <h2 style={{color: "white", zIndex: 10}}>Queue songs at music.dsek.se</h2>
             <div className={styles.background} style={{ backgroundImage: `url(${(currentTrack?.item as Track)?.album?.images[0].url})` }}></div>
             <img className={styles.cover} src={(currentTrack?.item as Track)?.album?.images[0].url} />
             <p className={styles.title}>{currentTrack?.item?.name}</p>
