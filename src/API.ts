@@ -19,7 +19,7 @@ export async function updateAccessToken(accessToken: AccessToken) {
   sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID as string, accessToken);
 
   setInterval(() => {
-    getCurrentStatus();
+    poll();
   }, 1000 * 60);
 }
 
@@ -138,6 +138,15 @@ export async function getCurrentStatus() {
     console.log("Device not activated");
     // activateDevice();
   }
+}
+
+export async function poll() {
+  try {
+    headers();
+    await sdk?.player?.getPlaybackState();
+  } catch (error) {
+    console.log("Can't poll");
+  }  
 }
 
 export async function setVolume(value: number) {
