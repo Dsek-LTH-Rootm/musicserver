@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Slider from './Slider';
 import Progress from './Progress';
-import { toast } from './toast.tsx';
+import { toast } from './Toast.tsx';
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
