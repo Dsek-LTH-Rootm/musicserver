@@ -8,7 +8,7 @@ import { GetArtist } from './ViewTrack';
 export default function ViewAlbum({ album, func }: albumProp) {
   return (
     <div className={styles.smallContainer}>
-      <button className={styles.button} onClick={() => func(album?.uri)}><PlayCircleFilled /></button>
+      <button className={styles.button} onClick={() => func(album?.uri, false)}><PlayCircleFilled /></button>
       <a className={styles.cover} target="_blank" href={album?.external_urls?.spotify}><Image fill={true} alt="Playlist's cover art" src={album?.images[0]?.url} className={styles.cover} /></a>
       <a href={album?.external_urls?.spotify} target="_blank" className={styles.title}>{album?.name}</a>
       <div className={styles.artist}>
