@@ -1,7 +1,6 @@
 "use server";
 import { SpotifyApi, AccessToken, PlaybackState } from '@spotify/web-api-ts-sdk';
-import { exec, execSync } from 'child_process';
-import { revalidatePath } from 'next/cache';
+import { execSync } from 'child_process';
 import { headers } from "next/headers";
 
 var sdk: SpotifyApi;
@@ -17,10 +16,6 @@ export async function updateAccessToken(accessToken: AccessToken) {
     return;
   }
   sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID as string, accessToken);
-
-  setInterval(() => {
-    poll();
-  }, 1000 * 60);
 }
 
 export async function search(query: string) {
@@ -91,10 +86,13 @@ async function activateDevice() {
     ];
     const play = true;
     await sdk?.player?.transferPlayback(device_ids as string[], true);
-    console.log("Found device " + element.id);
+    console.log("Found device ID:" + element.id + " Name: " + element.name);
     active_device = element.id;
   });
 
+  if (response.devices.length == 0) {
+    execSync("systemctl restart spotify");
+  }
 }
 
 // https://github.com/vercel/next.js/discussions/54075
