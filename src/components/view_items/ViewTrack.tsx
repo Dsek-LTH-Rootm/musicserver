@@ -1,5 +1,5 @@
 import styles from '../view.module.css';
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusCircleFilled } from "@ant-design/icons";
 import { trackProp } from "../View";
 import { SimplifiedArtist } from "@spotify/web-api-ts-sdk";
 import Image from "next/image";
@@ -14,7 +14,7 @@ export default function ViewTrack({ track, func, showButton }: trackProp) {
   return (
     <div className={styles.smallContainer}>
       {showButton !== false && (
-        <button className={styles.button} onClick={() => func(track?.uri)}><PlusOutlined /></button>
+        <button className={styles.button} onClick={() => func(track?.uri)}><PlusCircleFilled /></button>
       )}
       <a className={styles.cover} target="_blank" href={track?.album?.external_urls?.spotify}><Image fill={true} alt="Song's album cover art" src={track?.album?.images[0]?.url} className={styles.cover} /></a>
       <a href={track?.external_urls?.spotify} target="_blank" className={styles.title}>{track?.name}</a>
