@@ -55,10 +55,10 @@ export async function skipBack() {
   }
 }
 
-export async function play(context_uri?: string, no_shuffle?: boolean) {
+export async function play(context_uri?: string, shuffle?: boolean) {
   try {
     await sdk.player.startResumePlayback(active_device!, context_uri);
-    if (context_uri && !no_shuffle) { // need to turn off and on shuffle for spotify to shuffle
+    if (context_uri && shuffle) { // need to turn off and on shuffle for spotify to shuffle
       await sdk?.player?.togglePlaybackShuffle(false);
       await sdk?.player?.togglePlaybackShuffle(true);
     }
