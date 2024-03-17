@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Music server',
-  description: 'Music server to allow multiple people control 1 spotify, without changing accounts',
+  description: 'Non-commercial music server to allow multiple people control 1 spotify',
 }
 
 export default function RootLayout({

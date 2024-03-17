@@ -1,9 +1,9 @@
 import React from 'react';
 import { unmountComponentAtNode } from 'react-dom';
 import { createRoot } from 'react-dom/client';
-import { Toast } from './ToastContainer';
+import { ToastComponent } from './ToastContainer';
 
-export class toast extends React.Component {
+export class Toast extends React.Component {
   static currentToast: boolean;
   static timeout: ReturnType<typeof setTimeout> | null;
 
@@ -13,11 +13,10 @@ export class toast extends React.Component {
   static remove() {
     const toastContainer = createRoot(document.getElementById("toast-container") as HTMLElement);
     toastContainer.unmount();
-    // unmountComponentAtNode(document.getElementById("toast-container") as HTMLElement)
-    toast.currentToast = false
-    if (toast.timeout) {
-      clearTimeout(toast.timeout)
-      toast.timeout = null
+    Toast.currentToast = false
+    if (Toast.timeout) {
+      clearTimeout(Toast.timeout)
+      Toast.timeout = null
     }
   }
 
@@ -47,14 +46,14 @@ export class toast extends React.Component {
       }
     }
 
-    if (toast.currentToast) {
-      toast.remove()
+    if (Toast.currentToast) {
+      Toast.remove()
     }
 
     const toastContainer = createRoot(document.getElementById("toast-container") as HTMLElement);
-    toastContainer.render(<Toast message={message}/>);
+    toastContainer.render(<ToastComponent message={message}/>);
 
-    toast.currentToast = true;
-    toast.timeout = setTimeout(toast.remove, duration * 1000);
+    Toast.currentToast = true;
+    Toast.timeout = setTimeout(Toast.remove, duration * 1000);
   }
 }

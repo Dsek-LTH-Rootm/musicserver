@@ -24,14 +24,13 @@ export default function PlayerFullscreen() {
   return (
     <main>
       {currentTrack && (
-        <>
-          <div className={styles.container} >
-            <div className={styles.background} style={{ backgroundImage: `url(${(currentTrack?.item as Track)?.album?.images[0].url})` }}></div>
-            <img className={styles.cover} src={(currentTrack?.item as Track)?.album?.images[0].url} />
-            <p className={styles.title}>{currentTrack?.item?.name}</p>
-            <p className={styles.artists}>{(currentTrack?.item as Track)?.artists[0].name}</p>
-          </div>
-        </>
+        <div className={styles.container} >
+          <div className={styles.background} style={{ backgroundImage: `url(${(currentTrack?.item as Track)?.album?.images[0].url})` }}></div>
+          <p className={styles.link}>Queue tracks at: {window.location.origin}</p>
+          <img className={styles.cover} src={(currentTrack?.item as Track)?.album?.images[0].url} />
+          <p className={styles.title}>{currentTrack?.item?.name}</p>
+          <p className={styles.artists}>{(currentTrack?.item as Track)?.artists[0].name}</p>
+        </div>
       )}
       {!currentTrack && (
         <>

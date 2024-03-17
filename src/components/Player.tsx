@@ -1,13 +1,13 @@
 'use client';
 import styles from './player.module.css';
-import { LeftOutlined, RightOutlined, PlayCircleFilled, PauseCircleFilled } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined, PlayCircleFilled, PauseCircleFilled, UpCircleFilled, DownCircleFilled } from "@ant-design/icons";
 import { getCurrentStatus, pause, play, skipBack, skipNext } from '@/API';
 import { PlaybackState, Track } from '@spotify/web-api-ts-sdk';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Slider from './Slider';
 import Progress from './Progress';
-import { toast } from './Toast.tsx';
+import { Toast } from './Toast';
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -30,25 +30,25 @@ export default function Player() {
   const back = () => {
     setPlaying(true);
     skipBack();
-    toast.add("Skipped to previous song");
+    Toast.add("Skipped to previous song");
   }
 
   const resume = () => {
     setPlaying(true);
     play();
-    toast.add("Started playing")
+    Toast.add("Started playing")
   }
 
   const stop = () => {
     setPlaying(false);
     pause();
-    toast.add("Stopped playing");
+    Toast.add("Stopped playing");
   }
 
   const forward = () => {
     setPlaying(true);
     skipNext();
-    toast.add("Skipped to next song");
+    Toast.add("Skipped to next song");
   }
 
   const hide = () => {
@@ -57,7 +57,7 @@ export default function Player() {
 
   return (
     <div className={styles.container}>
-      <button className={infoHide ? styles.infoHide : styles.info} type="button" onClick={hide}>
+      <div className={infoHide ? styles.infoHide : styles.info}>
         <div style={{ position: "relative", height: "100%", aspectRatio: "1 / 1" }}>
           <Image fill={true} alt="Song's album cover art" className={styles.icon} src={(currentTrack?.item as Track)?.album?.images[0]?.url} />
         </div>
@@ -65,7 +65,8 @@ export default function Player() {
           <p><a href={currentTrack?.item?.external_urls?.spotify} className={styles.link}>{currentTrack?.item?.name}</a></p>
           <p><a href={(currentTrack?.item as Track)?.artists[0]?.external_urls?.spotify} className={styles.link}>{(currentTrack?.item as Track)?.artists[0]?.name}</a></p>
         </div>
-      </button>
+        <button className={styles.button} type="button" onClick={hide}>{infoHide ? (<UpCircleFilled className={styles.icon} style={{fontSize: "30px"}} />) : (<DownCircleFilled className={styles.icon} style={{fontSize: "30px"}} />)}</button>
+      </div>
       <div className={styles.buttonContainer}>
         <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
         {playing && (
