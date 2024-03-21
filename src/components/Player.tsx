@@ -56,16 +56,17 @@ export default function Player() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={infoHide ? styles.infoHide : styles.info}>
+    <div className={styles.container} >
+      <div className={infoHide ? styles.infoHide : styles.info} onClick={hide}>
         <div style={{ position: "relative", height: "100%", aspectRatio: "1 / 1" }}>
           <Image fill={true} alt="Song's album cover art" className={styles.icon} src={(currentTrack?.item as Track)?.album?.images[0]?.url} />
         </div>
-        <div className={styles.infoText}>
-          <p><a href={currentTrack?.item?.external_urls?.spotify} className={styles.link}>{currentTrack?.item?.name}</a></p>
-          <p><a href={(currentTrack?.item as Track)?.artists[0]?.external_urls?.spotify} className={styles.link}>{(currentTrack?.item as Track)?.artists[0]?.name}</a></p>
+        <div style={{overflow: 'hidden'}}>
+          <div className={styles.infoText}>
+            <p><a href={currentTrack?.item?.external_urls?.spotify} className={styles.link}>{currentTrack?.item?.name}</a></p>
+            <p><a href={(currentTrack?.item as Track)?.artists[0]?.external_urls?.spotify} className={styles.link}>{(currentTrack?.item as Track)?.artists[0]?.name}</a></p>
+          </div>
         </div>
-        <button className={styles.button} type="button" onClick={hide}>{infoHide ? (<UpCircleFilled className={styles.icon} style={{fontSize: "30px"}} />) : (<DownCircleFilled className={styles.icon} style={{fontSize: "30px"}} />)}</button>
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>

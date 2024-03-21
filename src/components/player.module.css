@@ -5,11 +5,11 @@
   box-sizing: content-box;
   display: flex;
   overflow: visible;
-  padding-bottom: 10px;
-  padding-top: 10px;
   z-index: 10;
   background-color: black;
   position: fixed;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .button {
@@ -53,18 +53,16 @@
   width: 40%;
   max-width: 300px;
   height: auto;
-  aspect-ratio: 1 / 1;
   align-self: end;
   background-color: black;
   border: 0px transparent;
   outline: none;
-  /* padding-right: 10px; */
+  overflow: hidden;
 }
 
 .infoHide {
   position: relative;
   cursor: pointer;
-  padding-left: 10px;
   width: 40%;
   max-width: 300px;
   display: flex;
@@ -72,6 +70,8 @@
   background-color: black;
   border: 0px transparent;
   outline: none;
+  overflow: hidden;
+  padding-left: 10px;
 }
 
 .infoText {
@@ -83,8 +83,12 @@
   color: white;
   text-align: left;
   text-wrap: nowrap;
-  overflow: hidden;
+  font-size: 12px;
   /* animation: scrolling-text 5s linear infinite; */
+}
+
+.infoText:hover {
+  animation-play-state: paused;
 }
 
 .bar {
@@ -137,10 +141,10 @@
 
 @keyframes scrolling-text {
   0% {
-    transform: translate(0, 0);
+    transform: translateX(0)
   }
 
   100% {
-    transform: translate(-100%, 0);
+    transform: translateX(-100%);
   }
 }

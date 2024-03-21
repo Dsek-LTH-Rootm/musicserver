@@ -1,11 +1,12 @@
 "use server";
 import { SpotifyApi, AccessToken, PlaybackState } from '@spotify/web-api-ts-sdk';
-import { exec, execSync } from 'child_process';
-import { revalidatePath } from 'next/cache';
+import { execSync } from 'child_process';
 import { headers } from "next/headers";
+import type { Queue } from '@spotify/web-api-ts-sdk';
 
-var sdk: SpotifyApi;
-var active_device: string | null;
+let sdk: SpotifyApi;
+let active_device: string | null;
+let lastCalls = new Map<string, number>();
 
 export async function getSDK() {
   return sdk;
@@ -17,10 +18,6 @@ export async function updateAccessToken(accessToken: AccessToken) {
     return;
   }
   sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID as string, accessToken);
-
-  setInterval(() => {
-    poll();
-  }, 1000 * 60);
 }
 
 export async function search(query: string) {
@@ -60,14 +57,16 @@ export async function skipBack() {
   }
 }
 
-export async function play(context_uri?: string, no_shuffle?: boolean) {
+export async function play(context_uri?: string, shuffle?: boolean) {
   try {
     await sdk.player.startResumePlayback(active_device!, context_uri);
-    if (context_uri && !no_shuffle) { // need to turn off and on shuffle for spotify to shuffle
-      await sdk?.player?.togglePlaybackShuffle(false);
+    if (context_uri && shuffle) { // need to turn off and on shuffle for spotify to shuffle
       await sdk?.player?.togglePlaybackShuffle(true);
+    } else {
+      await sdk?.player?.togglePlaybackShuffle(false);
     }
-    console.log("Started playing");
+    lastCalls.set("queue", 0);
+    console.log("Started playing with shuffle: " + shuffle);
   } catch (error) {
     activateDevice();
   }
@@ -97,13 +96,17 @@ async function activateDevice() {
 
 }
 
-// https://github.com/vercel/next.js/discussions/54075
+let queue: Queue;
 export async function getQueue() {
   try {
     headers();
-    const response = await sdk?.player?.getUsersQueue();
-    console.log("Got queue");
-    return response;
+    const q = lastCalls.get("queue");
+    if ((q && Date.now() - q > 5000) || !q) {
+      queue = await sdk?.player?.getUsersQueue();
+      lastCalls.set("queue", Date.now());
+      console.log("Got queue");
+    } 
+    return queue;
   } catch (error) {
     console.log(error);
   }
@@ -117,26 +120,19 @@ export async function getAccessToken() {
   }
 }
 
-// stop clients from making individual requests and let the server do 1 request for all clients every x seconds
 var playback: PlaybackState;
-var timeSinceFetch: number = 0;
-
 export async function getCurrentStatus() {
   try {
     headers();
-    // Date.now() returns milliseconds
-    if (Date.now() - timeSinceFetch > 5000 || playback === undefined) {
+    const s = lastCalls.get("status");
+    if ((s && Date.now() - s > 5000) || !s) {
       playback = await sdk?.player?.getCurrentlyPlayingTrack();
-      if (playback === null) {
-        activateDevice();
-      }
-      timeSinceFetch = Date.now();
+      lastCalls.set("status", Date.now());
     }
 
     return playback;
   } catch (error) {
     console.log("Device not activated");
-    // activateDevice();
   }
 }
 

@@ -30,7 +30,7 @@ export default function Browse() {
       return;
     }
     
-    setTab(2);
+    setTab(1);
     const data: any = await search(searchTerm);
     setResult(data);
     setLoading(false);
@@ -42,8 +42,6 @@ export default function Browse() {
     <div className={styles.browseContainer}>
       <div className={styles.tab}>
         <button className={styles.tabButton} type="button" onClick={() => setTab(0)}><HomeFilled /></button>
-        <button className={styles.tabButton} type="button" onClick={() => setTab(1)}><SignalFilled /></button>
-        {/* <button className={styles.tabButton} type="button" onClick={() => setShowSearch(true)}>Search</button> */}
         <form onSubmit={onSubmit} className={styles.container}>
           <div className={styles.searchContainer}>
             <input type="text" name="searchTerm" className={styles.search} placeholder='Search' />
@@ -54,12 +52,9 @@ export default function Browse() {
         </form>
       </div>
       {tab === 0 && (
-        <h1>This is a home page!</h1>
+        <ViewQueue show={tab === 0} />
       )}
       {tab === 1 && (
-        <ViewQueue show={tab === 1} />
-      )}
-      {tab === 2 && (
         <>
           {loading && (
             <div className={styles2.loading}>
