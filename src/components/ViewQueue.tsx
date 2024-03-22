@@ -16,6 +16,7 @@ export default function ViewQueue({ show }: viewQueueProp) {
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Continuously fetches queue from server
   useEffect(() => {
     const data = getQueue();
     data.then((value: Queue | undefined) => {
@@ -31,6 +32,7 @@ export default function ViewQueue({ show }: viewQueueProp) {
         if (!value) return;
         setTracks(value.queue as Track[]);
         setCurrentTrack(value.currently_playing as Track);
+        if (loading) setLoading(false);
       });
     }, 1000);
   }, [])

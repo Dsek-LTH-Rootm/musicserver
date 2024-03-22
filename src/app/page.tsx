@@ -1,19 +1,23 @@
-import styles from './page.module.css'
-import Browse from '@/components/Browse'
-import Auth from '@/components/Auth';
-import Player from '@/components/Player';
-import { ToastContainer } from '@/components/ToastContainer';
+import { getAccessToken } from "@/API";
+import styles from "./page.module.css";
+import Browse from "@/components/Browse";
+import Player from "@/components/Player";
+import { ToastContainer } from "@/components/ToastContainer";
 
-export default function Home() {
+export default async function Home() {
+  const accesToken = await getAccessToken();
+  if (accesToken == null) {
+    return (
+      <main className="h-screen w-full flex justify-center items-center">
+        <h1 className="">Spotify session not activated! Contact admin!</h1>
+      </main>
+    );
+  }
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <h1>Music server</h1>
-      </div>
       <Browse />
       <Player />
-      <Auth />
       <ToastContainer />
-    </main >
-  )
+    </main>
+  );
 }

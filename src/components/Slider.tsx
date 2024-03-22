@@ -2,7 +2,7 @@
 
 import { getVolume, setVolume } from "@/API";
 import { ChangeEvent, useEffect, useState } from "react";
-import styles from './player.module.css';
+import styles from "./player.module.css";
 import { SoundOutlined } from "@ant-design/icons";
 
 export default function Slider() {
@@ -15,17 +15,17 @@ export default function Slider() {
   const getValue = async () => {
     const v = await getVolume();
     setValue(Number(v as string));
-  }
+  };
 
   const valueChanged = async (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.valueAsNumber);
     setVolume(event.target.valueAsNumber);
-  }
+  };
 
   return (
-    <div className={styles.slider} >
-      <SoundOutlined className={styles.icon} style={{fontSize: 25}}/>
-      <input 
+    <div className={styles.slider}>
+      <SoundOutlined className={styles.icon} style={{ fontSize: 25 }} />
+      <input
         type="range"
         min={0}
         max={100}
@@ -34,5 +34,5 @@ export default function Slider() {
         onChange={valueChanged}
       />
     </div>
-  )
+  );
 }

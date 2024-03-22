@@ -1,0 +1,16 @@
+import type { NextRequest } from "next/server";
+
+export const config = {
+  matcher: ["/admin", "/login"],
+};
+
+export async function middleware(request: NextRequest) {
+  const user = request.cookies.get("currentUser")?.value;
+  if (!user && request.nextUrl.pathname.startsWith("/admin")) {
+    return Response.redirect(new URL("/login", request.url));
+  }
+
+  if (user && request.nextUrl.pathname.startsWith("/login")) {
+    return Response.redirect(new URL("/", request.url));
+  }
+}

@@ -1,6 +1,6 @@
 'use client';
 import styles from './player.module.css';
-import { LeftOutlined, RightOutlined, PlayCircleFilled, PauseCircleFilled, UpCircleFilled, DownCircleFilled } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined, PlayCircleFilled, PauseCircleFilled } from "@ant-design/icons";
 import { getCurrentStatus, pause, play, skipBack, skipNext } from '@/API';
 import { PlaybackState, Track } from '@spotify/web-api-ts-sdk';
 import { useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ export default function Player() {
 
   useEffect(() => {
     getCurrentlyPlaying();
-    setInterval(getCurrentlyPlaying, 500);
+    setInterval(getCurrentlyPlaying, 1000);
   }, []);
 
   const getCurrentlyPlaying = async () => {
