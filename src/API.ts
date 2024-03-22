@@ -8,6 +8,7 @@ import { execSync } from "child_process";
 import { headers } from "next/headers";
 import type { Queue } from "@spotify/web-api-ts-sdk";
 import { log } from "./utils";
+import { redirect } from "next/navigation";
 
 let sdk: SpotifyApi | undefined;
 let active_device: string | null;
@@ -18,21 +19,27 @@ export async function updateAccessToken(accessToken: AccessToken) {
     log("Access token empty");
     return;
   }
+
   sdk = SpotifyApi.withAccessToken(
     process.env.CLIENT_ID as string,
-    accessToken
+    accessToken,
   );
+
+  log("Logged in to spotify");
+  redirect("/");
 }
 
 export async function removeAccessToken() {
   sdk?.logOut();
   sdk = undefined;
+  log("Logged out of spotify");
+  redirect("/");
 }
 
 export async function search(query: string) {
   try {
     const response = await sdk?.search(query, ["track", "playlist", "album"]);
-    log("Searched");
+    log("Searched for " + query);
     return response;
   } catch (error: any) {
     if (error.status == 400) return;
@@ -80,7 +87,7 @@ export async function play(context_uri?: string, shuffle?: boolean) {
       await sdk?.player?.togglePlaybackShuffle(false);
     }
     lastCalls.set("queue", 0);
-    log("Started playing with shuffle: " + shuffle);
+    log("Started playing with shuffle turned " + shuffle);
   } catch (error: any) {
     if (error.status == 400) return;
     activateDevice();
@@ -113,6 +120,7 @@ async function activateDevice() {
 let queue: Queue | undefined;
 export async function getQueue() {
   try {
+    if (!sdk) return;
     headers();
     const q = lastCalls.get("queue");
     if ((q && Date.now() - q > 10000) || !q) {
@@ -138,11 +146,13 @@ export async function getAccessToken() {
 var playback: PlaybackState | undefined;
 export async function getCurrentStatus() {
   try {
+    if (!sdk) return;
     headers();
     const s = lastCalls.get("status");
     if ((s && Date.now() - s > 10000) || !s) {
       playback = await sdk?.player?.getCurrentlyPlayingTrack();
       lastCalls.set("status", Date.now());
+      log("Got playback state");
     }
 
     return playback;
@@ -173,7 +183,7 @@ export async function setVolume(value: number) {
 export async function getVolume() {
   try {
     const result = execSync(
-      "pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \\([0-9][0-9]*\\)%.*,\\1,'"
+      "pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \\([0-9][0-9]*\\)%.*,\\1,'",
     ).toString();
     return result;
   } catch (error) {

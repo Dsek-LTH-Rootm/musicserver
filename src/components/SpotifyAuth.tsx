@@ -13,7 +13,7 @@ export default function SpotifyAuth() {
         const redirectUri = await getRedirectUri();
         SpotifyApi.performUserAuthorization(
           clientid,
-          redirectUri,
+          redirectUri + "/admin",
           [
             "user-read-playback-state",
             "user-read-private",
@@ -30,7 +30,7 @@ export default function SpotifyAuth() {
             "user-library-modify",
             "user-library-read",
           ],
-          (accessToken) => updateAccessToken(accessToken)
+          (accessToken) => updateAccessToken(accessToken),
         );
       }
     });
@@ -39,7 +39,7 @@ export default function SpotifyAuth() {
   return (
     <button
       onClick={loginSpotify}
-      className="bg-green-600 p-2 transform transition hover:scale-105 box-border"
+      className="box-border w-full transform bg-green-600 p-2 transition hover:scale-105"
     >
       Login to spotify
     </button>

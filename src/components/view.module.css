@@ -72,6 +72,9 @@
 .button {
   color: white;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   aspect-ratio: 1 / 1;
   font-size: 2em;
   margin-right: 10px;

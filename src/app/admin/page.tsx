@@ -1,23 +1,23 @@
-import { getAccessToken, removeAccessToken } from "@/API";
+import { removeAccessToken } from "@/API";
 import SpotifyAuth from "@/components/SpotifyAuth";
-import { getClientID, getRedirectUri } from "@/utils";
-import { AccessToken, SpotifyApi } from "@spotify/web-api-ts-sdk";
 
 export default function AdminPage() {
   return (
-    <main className="*:text-white flex flex-col justify-center items-center h-screen">
-      <h1>Welcome to the admin page</h1>
-      <h2>Settings:</h2>
-      <h2>Modes:</h2>
-      <SpotifyAuth />
-      <form action={removeAccessToken}>
-        <button
-          type="submit"
-          className="bg-red-600 p-2 transform transition hover:scale-105 box-border"
-        >
-          Logout of spotify
-        </button>
-      </form>
+    <main className="flex h-screen flex-col items-center *:text-white">
+      <div className="w-1/3 *:text-xl">
+        <h1 className="mb-4 text-center !text-3xl">
+          Welcome to the admin page
+        </h1>
+        <SpotifyAuth />
+        <form action={removeAccessToken} className="mt-3">
+          <button
+            type="submit"
+            className="box-border w-full transform bg-red-600 p-2 transition hover:scale-105"
+          >
+            Logout of spotify
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
