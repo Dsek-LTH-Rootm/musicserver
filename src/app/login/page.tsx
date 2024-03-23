@@ -2,6 +2,7 @@ import { url_encode } from "@/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { randomUUID } from "crypto";
+import { getWord } from "@/words";
 
 export default function LoginPage() {
   async function authenticate() {
@@ -11,14 +12,17 @@ export default function LoginPage() {
 
     cookies().set("state", state);
     redirect(
-      `${process.env.KEYCLOAK_BASEURL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth?client_id=${process.env.KEYCLOAK_CLIENT}&redirect_uri=${url_encode(process.env.BASE_URL + "/callback")}&response_type=code&state=${state}&scope=openid`,
+      `${process.env.KEYCLOAK_BASEURL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth?client_id=${process.env.KEYCLOAK_CLIENT}&redirect_uri=${url_encode(process.env.BASE_URL + "/callback")}&response_type=code&state=${state}&scope=openid`
     );
   }
 
   async function createGuest() {
     "use server";
 
-    cookies().set("user", randomUUID());
+    const uuid = randomUUID();
+    cookies().set("user", uuid);
+    cookies().set("username", await getWord(uuid));
+    console.log(await getWord(uuid));
     redirect("/");
   }
 

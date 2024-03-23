@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 // Opt out of caching for all data requests in the route segment
@@ -29,18 +30,19 @@ export default function RootLayout({
           >
             Music server
           </Link>
-          <Link
-            href="/admin"
-            className="absolute right-0 mr-4 transform transition hover:scale-105 hover:text-gray-400"
-          >
-            <SettingOutlined className="flex aspect-square h-full justify-center" />
-          </Link>
-          {/* <Link
-            href="/login"
-            className="absolute right-0 mr-8 hover:text-gray-400"
-          >
-            Login
-          </Link> */}
+          <div className="absolute right-0 mr-4 flex">
+            <span className="!text-lg mr-4">
+              {cookies().get("username")
+                ? "Logged in as " + cookies().get("username")?.value
+                : "Not logged in"}
+            </span>
+            <Link
+              href="/admin"
+              className="transform transition hover:scale-105 hover:text-gray-400"
+            >
+              <SettingOutlined className="flex aspect-square h-full justify-center" />
+            </Link>
+          </div>
         </nav>
         {children}
       </body>
