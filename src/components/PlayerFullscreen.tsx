@@ -4,7 +4,7 @@ import { getCurrentStatus } from "@/API";
 import { PlaybackState, Track } from "@spotify/web-api-ts-sdk";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import styles from './playerfullscreen.module.css';
+import styles from "./playerfullscreen.module.css";
 
 export default function PlayerFullscreen() {
   const [currentTrack, setCurrentTrack] = useState<PlaybackState>();
@@ -19,20 +19,30 @@ export default function PlayerFullscreen() {
     if (data !== undefined) {
       setCurrentTrack(data);
     }
-  }
+  };
 
   return (
     <main>
       {currentTrack && (
-        <>
-          <div className={styles.container} >
-            <p>Queue music at music.dsek.se</p>
-            <div className={styles.background} style={{ backgroundImage: `url(${(currentTrack?.item as Track)?.album?.images[0].url})` }}></div>
-            <img className={styles.cover} src={(currentTrack?.item as Track)?.album?.images[0].url} />
-            <p className={styles.title}>{currentTrack?.item?.name}</p>
-            <p className={styles.artists}>{(currentTrack?.item as Track)?.artists[0].name}</p>
-          </div>
-        </>
+        <div className={styles.container}>
+          <div
+            className={styles.background}
+            style={{
+              backgroundImage: `url(${(currentTrack?.item as Track)?.album?.images[0].url})`,
+            }}
+          ></div>
+          <p className={styles.link}>
+            Queue tracks at: {window.location.origin}
+          </p>
+          <img
+            className={styles.cover}
+            src={(currentTrack?.item as Track)?.album?.images[0].url}
+          />
+          <p className={styles.title}>{currentTrack?.item?.name}</p>
+          <p className={styles.artists}>
+            {(currentTrack?.item as Track)?.artists[0].name}
+          </p>
+        </div>
       )}
       {!currentTrack && (
         <>

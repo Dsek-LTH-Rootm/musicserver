@@ -10,7 +10,7 @@ export function ToastContainer() {
   )
 } 
 
-export function Toast({message}: {message: string}) {
+export function ToastComponent({message}: {message: string}) {
 
   return (
     <div className={styles.container}>

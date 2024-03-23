@@ -56,10 +56,15 @@
 
 .duration {
   right: 0px;
-  /* text-align: right; */
-  width: 40%;
-  padding-left: 10px;
-  overflow: hidden;
+  text-align: right;
+  margin-left: auto;
+  margin-right: 10px;
+  width: 100px;
+  text-wrap: nowrap;
+}
+
+.description {
+  animation: scrolling-text 5s linear infinite;
 }
 
 .cover {
@@ -72,6 +77,9 @@
 .button {
   color: white;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   aspect-ratio: 1 / 1;
   font-size: 2em;
   margin-right: 10px;

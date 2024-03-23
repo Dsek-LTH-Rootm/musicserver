@@ -1,21 +1,23 @@
-import styles from './page.module.css'
-import Browse from '@/components/Browse'
-import Auth from '@/components/Auth';
-import Player from '@/components/Player';
-import Image from 'next/image';
-import { ToastContainer } from '@/components/ToastContainer';
+import { getAccessToken } from "@/API";
+import styles from "./page.module.css";
+import Browse from "@/components/Browse";
+import Player from "@/components/Player";
+import { ToastContainer } from "@/components/ToastContainer";
 
-export default function Home() {
+export default async function Home() {
+  const accesToken = await getAccessToken();
+  if (accesToken == null) {
+    return (
+      <main className="flex items-center justify-center">
+        <h1 className="">Spotify session not activated! Contact admin!</h1>
+      </main>
+    );
+  }
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <Image src='/sigill-adobe-garamond.png' alt='D-sek logo' width='64' height='64'/>
-        <h1>thoven</h1>
-      </div>
       <Browse />
       <Player />
-      <Auth />
       <ToastContainer />
-    </main >
-  )
+    </main>
+  );
 }

@@ -1,7 +1,7 @@
-'use client'
+"use client";
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import styles from './browse.module.css';
-import styles2 from './view.module.css';
+import styles from "./browse.module.css";
+import styles2 from "./view.module.css";
 import View from "./View";
 import { search } from "@/API";
 import { FormEvent, useState } from "react";
@@ -14,7 +14,8 @@ export interface pickProp {
 }
 
 export default function Browse() {
-  const [result, setResult] = useState<Pick<PartialSearchResult, "albums" | "playlists" | "tracks">>();
+  const [result, setResult] =
+    useState<Pick<PartialSearchResult, "albums" | "playlists" | "tracks">>();
   const [tab, setTab] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -22,14 +23,14 @@ export default function Browse() {
     e.preventDefault();
 
     setLoading(true);
-    
+
     const formData = new FormData(e.currentTarget);
     const searchTerm: string = formData.get("searchTerm") as string;
     if (!searchTerm || searchTerm === "") {
       setLoading(false);
       return;
     }
-    
+
     setTab(1);
     const data: any = await search(searchTerm);
     setResult(data);
@@ -41,21 +42,28 @@ export default function Browse() {
   return (
     <div className={styles.browseContainer}>
       <div className={styles.tab}>
-        <button className={styles.tabButton} type="button" onClick={() => setTab(0)}><HomeFilled /></button>
-        {/* <button className={styles.tabButton} type="button" onClick={() => setTab(1)}><SignalFilled /></button> */}
-        {/* <button className={styles.tabButton} type="button" onClick={() => setShowSearch(true)}>Search</button> */}
+        <button
+          className={styles.tabButton}
+          type="button"
+          onClick={() => setTab(0)}
+        >
+          <HomeFilled />
+        </button>
         <form onSubmit={onSubmit} className={styles.container}>
           <div className={styles.searchContainer}>
-            <input type="text" name="searchTerm" className={styles.search} placeholder='Search' />
+            <input
+              type="text"
+              name="searchTerm"
+              className={styles.search}
+              placeholder="Search"
+            />
             <button type="submit" className={styles.button}>
               <SearchOutlined className={styles.icon} />
             </button>
           </div>
         </form>
       </div>
-      {tab === 0 && (
-        <ViewQueue show={tab === 0} />
-      )}
+      {tab === 0 && <ViewQueue show={tab === 0} />}
       {tab === 1 && (
         <>
           {loading && (
@@ -64,7 +72,14 @@ export default function Browse() {
             </div>
           )}
           {!loading && (
-            <View props={result as Pick<PartialSearchResult, "albums" | "playlists" | "tracks">} />
+            <View
+              props={
+                result as Pick<
+                  PartialSearchResult,
+                  "albums" | "playlists" | "tracks"
+                >
+              }
+            />
           )}
         </>
       )}

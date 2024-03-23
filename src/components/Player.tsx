@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Slider from './Slider';
 import Progress from './Progress';
-import { toast } from './Toast.tsx';
+import { Toast } from './Toast';
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -16,7 +16,7 @@ export default function Player() {
 
   useEffect(() => {
     getCurrentlyPlaying();
-    setInterval(getCurrentlyPlaying, 500);
+    setInterval(getCurrentlyPlaying, 1000);
   }, []);
 
   const getCurrentlyPlaying = async () => {
@@ -30,25 +30,25 @@ export default function Player() {
   const back = () => {
     setPlaying(true);
     skipBack();
-    toast.add("Skipped to previous song");
+    Toast.add("Skipped to previous song");
   }
 
   const resume = () => {
     setPlaying(true);
     play();
-    toast.add("Started playing")
+    Toast.add("Started playing")
   }
 
   const stop = () => {
     setPlaying(false);
     pause();
-    toast.add("Stopped playing");
+    Toast.add("Stopped playing");
   }
 
   const forward = () => {
     setPlaying(true);
     skipNext();
-    toast.add("Skipped to next song");
+    Toast.add("Skipped to next song");
   }
 
   const hide = () => {
@@ -56,16 +56,18 @@ export default function Player() {
   }
 
   return (
-    <div className={styles.container}>
-      <button className={infoHide ? styles.infoHide : styles.info} type="button" onClick={hide}>
+    <div className={styles.container} >
+      <div className={infoHide ? styles.infoHide : styles.info} onClick={hide}>
         <div style={{ position: "relative", height: "100%", aspectRatio: "1 / 1" }}>
           <Image fill={true} alt="Song's album cover art" className={styles.icon} src={(currentTrack?.item as Track)?.album?.images[0]?.url} />
         </div>
-        <div className={styles.infoText}>
-          <p><a href={currentTrack?.item?.external_urls?.spotify} className={styles.link}>{currentTrack?.item?.name}</a></p>
-          <p><a href={(currentTrack?.item as Track)?.artists[0]?.external_urls?.spotify} className={styles.link}>{(currentTrack?.item as Track)?.artists[0]?.name}</a></p>
+        <div style={{overflow: 'hidden'}}>
+          <div className={styles.infoText}>
+            <p><a href={currentTrack?.item?.external_urls?.spotify} className={styles.link}>{currentTrack?.item?.name}</a></p>
+            <p><a href={(currentTrack?.item as Track)?.artists[0]?.external_urls?.spotify} className={styles.link}>{(currentTrack?.item as Track)?.artists[0]?.name}</a></p>
+          </div>
         </div>
-      </button>
+      </div>
       <div className={styles.buttonContainer}>
         <button className={styles.button} type="button" onClick={back}><LeftOutlined className={`${styles.icon} ${styles.small}`} /></button>
         {playing && (

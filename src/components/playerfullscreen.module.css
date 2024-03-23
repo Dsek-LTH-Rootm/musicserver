@@ -12,6 +12,7 @@
   font-weight: bolder;
   font-family: sans-serif;
   text-shadow: 1px 3px 1px 1px black;
+  text-align: center;
 }
 
 .background {
@@ -38,10 +39,15 @@
 .title {
   margin-top: 5px;
   z-index: 1;
-  font-size: 9vh;
+  font-size: 8vh;
 }
 
 .artists {
   z-index: 1;
-  font-size: 7vh;
+  font-size: 5vh;
+}
+
+.link {
+  z-index: 1;
+  font-size: 3vh;
 }
