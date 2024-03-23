@@ -1,7 +1,6 @@
-import React from 'react';
-import { unmountComponentAtNode } from 'react-dom';
-import { createRoot } from 'react-dom/client';
-import { ToastComponent } from './ToastContainer';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { ToastComponent } from "./ToastContainer";
 
 export class Toast extends React.Component {
   static currentToast: boolean;
@@ -9,49 +8,53 @@ export class Toast extends React.Component {
 
   currentToast = false;
   timeout = null;
-  
+
   static remove() {
-    const toastContainer = createRoot(document.getElementById("toast-container") as HTMLElement);
+    const toastContainer = createRoot(
+      document.getElementById("toast-container") as HTMLElement
+    );
     toastContainer.unmount();
-    Toast.currentToast = false
+    Toast.currentToast = false;
     if (Toast.timeout) {
-      clearTimeout(Toast.timeout)
-      Toast.timeout = null
+      clearTimeout(Toast.timeout);
+      Toast.timeout = null;
     }
   }
 
   static add(message: string, options: any = null) {
-    let duration = 5
-    let color
+    let duration = 5;
+    let color;
 
     if (options) {
       if (options.duration) {
-        duration = options.duration
+        duration = options.duration;
       }
-  
+
       if (options.type === "info") {
-        color = "blue"
+        color = "blue";
       }
-  
+
       if (options.type === "success") {
-        color = "green"
+        color = "green";
       }
-  
+
       if (options.type === "error") {
-        color = "red"
+        color = "red";
       }
-  
+
       if (options.type === "warn") {
-        color = "orange"
+        color = "orange";
       }
     }
 
     if (Toast.currentToast) {
-      Toast.remove()
+      Toast.remove();
     }
 
-    const toastContainer = createRoot(document.getElementById("toast-container") as HTMLElement);
-    toastContainer.render(<ToastComponent message={message}/>);
+    const toastContainer = createRoot(
+      document.getElementById("toast-container") as HTMLElement
+    );
+    toastContainer.render(<ToastComponent message={message} />);
 
     Toast.currentToast = true;
     Toast.timeout = setTimeout(Toast.remove, duration * 1000);

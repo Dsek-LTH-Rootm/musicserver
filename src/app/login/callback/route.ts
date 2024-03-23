@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 import { log, url_encode } from "@/utils";
 
 export async function GET(req: NextRequest) {
-  return async () => {
+  const callback = async () => {
     "use server";
 
     const url = url_encode(process.env.BASE_URL + "login/callback");
@@ -50,4 +50,6 @@ export async function GET(req: NextRequest) {
       return res;
     }
   };
+
+  return callback();
 }
