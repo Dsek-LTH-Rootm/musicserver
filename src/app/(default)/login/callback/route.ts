@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { log, url_encode } from "@/utils";
+import { log } from "@/utils";
 
 export async function GET(req: NextRequest) {
   const callback = async () => {
     "use server";
 
-    const url = url_encode(process.env.BASE_URL + "login/callback");
+    const url = encodeURIComponent(process.env.BASE_URL + "login/callback");
     const code = req.nextUrl.searchParams.get("code");
     if (!code) {
       log("Authentication callback return with empty code");
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     } else {
       const token = await axios
         .post(
-          `${process.env.KEYCLOAK_BASEURL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
+          `${process.env.KEYCLOAK_BASE_URL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
           {
             grant_type: "authorization_code",
             code: code,
@@ -31,8 +31,9 @@ export async function GET(req: NextRequest) {
           }
         )
         .catch((err) => {
+          log(code);
           log(err.response.status);
-          log(err.response.data);
+          log(JSON.stringify(err.response.data));
         });
 
       const res = NextResponse.redirect(

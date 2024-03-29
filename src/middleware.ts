@@ -1,8 +1,10 @@
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export const config = {
   matcher: ["/admin", "/login"],
 };
+
+export const dynamic = "force-dynamic";
 
 export async function middleware(request: NextRequest) {
   const user = request.cookies.get("user")?.value;

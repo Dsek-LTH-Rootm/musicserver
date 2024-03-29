@@ -1,4 +1,3 @@
-import { url_encode } from "@/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { randomUUID } from "crypto";
@@ -9,10 +8,9 @@ export default function LoginPage() {
     "use server";
 
     const state = Math.random().toString(36).substring(2, 20);
-
     cookies().set("state", state);
     redirect(
-      `${process.env.KEYCLOAK_BASEURL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth?client_id=${process.env.KEYCLOAK_CLIENT}&redirect_uri=${url_encode(process.env.BASE_URL + "/callback")}&response_type=code&state=${state}&scope=openid`
+      `${process.env.KEYCLOAK_BASE_URL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/auth?client_id=${process.env.KEYCLOAK_CLIENT}&redirect_uri=${encodeURIComponent(process.env.BASE_URL + "login/callback")}&response_type=code&state=${state}&scope=openid`
     );
   }
 

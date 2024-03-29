@@ -22,30 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <nav className="m-4 flex w-screen items-center font-mono *:text-sm min-[340px]:*:text-xl sm:*:text-3xl">
-          <Link
-            href="/"
-            className="transform transition hover:scale-105 hover:text-gray-400"
-          >
-            Music server
-          </Link>
-          <div className="absolute right-0 mr-4 flex">
-            <span className="!text-lg mr-4">
-              {cookies().get("username")
-                ? "Logged in as " + cookies().get("username")?.value
-                : "Not logged in"}
-            </span>
-            <Link
-              href="/admin"
-              className="transform transition hover:scale-105 hover:text-gray-400"
-            >
-              <SettingOutlined className="flex aspect-square h-full justify-center" />
-            </Link>
-          </div>
-        </nav>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
