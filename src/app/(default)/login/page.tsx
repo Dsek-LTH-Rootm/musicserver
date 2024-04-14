@@ -18,8 +18,9 @@ export default function LoginPage() {
     "use server";
 
     const uuid = randomUUID();
-    cookies().set("user", uuid);
-    cookies().set("username", await getWord(uuid));
+    cookies().set("user", uuid, {
+      maxAge: 365 * 86400,
+    });
     console.log(await getWord(uuid));
     redirect("/");
   }
