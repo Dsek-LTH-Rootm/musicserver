@@ -15,6 +15,11 @@ const words = [
 
 export async function getWord(id: string) {
   return (
-    words[id.charCodeAt(0) % words.length] + Math.floor(Math.random() * 99)
+    words[id.charCodeAt(0) % words.length] +
+    ((id.charCodeAt(0) +
+      id.charCodeAt(1) +
+      id.charCodeAt(2) +
+      id.charCodeAt(3)) %
+      99)
   );
 }
