@@ -4,6 +4,7 @@ import { SettingOutlined } from "@ant-design/icons";
 import { getWord } from "@/words";
 import { userinfo } from "@/types";
 import { jwtDecode } from "jwt-decode";
+import Image from "next/image";
 
 export default async function DefaultLayout({
   children,
@@ -32,7 +33,15 @@ export default async function DefaultLayout({
           href="/"
           className="transform transition hover:scale-105 hover:text-gray-400"
         >
-          Music server
+          <span className="flex flex-row items-center">
+            <Image
+              width={64}
+              height={64}
+              src="/sigill-adobe-garamond.jpg"
+              alt="D-guild logo"
+            />
+            -thoven
+          </span>
         </Link>
         <div className="absolute right-0 mr-4 flex">
           <span className="!text-lg mr-4">{await getUser()}</span>
