@@ -4,17 +4,19 @@ import axios, { AxiosResponse } from "axios";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { log } from "@/utils";
+import { headers } from "next/headers";
 
 export async function GET(req: NextRequest) {
   const callback = async () => {
     "use server";
 
-    const url = encodeURIComponent(process.env.BASE_URL + "login/callback");
+    const url = process.env.BASE_URL + "login/callback";
     const code = req.nextUrl.searchParams.get("code");
     if (!code) {
       log("Authentication callback return with empty code");
       redirect("/login");
     } else {
+      headers();
       const token = await axios
         .post(
           `${process.env.KEYCLOAK_BASE_URL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
@@ -31,13 +33,14 @@ export async function GET(req: NextRequest) {
           }
         )
         .catch((err) => {
-          log(code);
+          log("Couldn't get access token");
           log(err.response.status);
           log(JSON.stringify(err.response.data));
         });
 
       const res = NextResponse.redirect(
-        new URL("/", req.nextUrl.protocol + req.headers.get("host"))
+        new URL("/", req.nextUrl.protocol + req.headers.get("host")),
+        { status: 302 }
       );
       res.cookies.set(
         "accessToken",
