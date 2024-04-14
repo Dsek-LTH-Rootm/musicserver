@@ -13,7 +13,7 @@ export default function SpotifyAuth() {
         const redirectUri = await getRedirectUri();
         SpotifyApi.performUserAuthorization(
           clientid,
-          redirectUri + "/admin",
+          redirectUri + "admin",
           [
             "user-read-playback-state",
             "user-read-private",
