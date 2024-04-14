@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { SettingOutlined } from "@ant-design/icons";
 import { getWord } from "@/words";
-import axios, { AxiosResponse } from "axios";
-import { log } from "@/utils";
 import { userinfo } from "@/types";
 import { jwtDecode } from "jwt-decode";
 
