@@ -1,4 +1,9 @@
-import { ExternalUrls, Followers, UserReference, Image } from "@spotify/web-api-ts-sdk";
+import {
+  ExternalUrls,
+  Followers,
+  UserReference,
+  Image,
+} from "@spotify/web-api-ts-sdk";
 
 export interface image {
   url: string;
@@ -169,4 +174,27 @@ export interface PlaylistBase {
   snapshot_id: string;
   type: string;
   uri: string;
+}
+
+export interface userinfo {
+  exp: number;
+  iat: number;
+  auth_time: number;
+  jti: string;
+  iss: string;
+  sub: string;
+  typ: string;
+  azp: string;
+  session_state: string;
+  acr: string;
+  "allowed-origins": [string];
+  scope: string;
+  sid: string;
+  email_verified: boolean;
+  group_list: [string];
+  name: string;
+  preferred_username: string;
+  given_name: string;
+  family_name: string;
+  email: string;
 }

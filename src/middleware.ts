@@ -1,16 +1,23 @@
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export const config = {
   matcher: ["/admin", "/login"],
 };
 
+export const dynamic = "force-dynamic";
+
 export async function middleware(request: NextRequest) {
   const user = request.cookies.get("user")?.value;
-  if (!user && request.nextUrl.pathname.startsWith("/admin")) {
+  const accessToken = request.cookies.get("accessToken")?.value;
+  if (!user && !accessToken && request.nextUrl.pathname.startsWith("/admin")) {
     return Response.redirect(new URL("/login", request.url));
   }
 
-  if (user && request.nextUrl.pathname.startsWith("/login")) {
+  if (
+    (user || accessToken) &&
+    request.nextUrl.pathname.startsWith("/login") &&
+    !request.nextUrl.searchParams.get("guest")
+  ) {
     return Response.redirect(new URL("/", request.url));
   }
 }

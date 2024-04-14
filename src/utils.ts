@@ -10,11 +10,11 @@ export async function getClientID() {
 }
 
 export async function getRedirectUri() {
+  if (process.env.DEV_BASE_URL) {
+    log("Retrieving dev redirect uri: " + process.env.DEV_BASE_URL);
+    return process.env.DEV_BASE_URL as string;
+  }
+
   log("Retrieving redirect uri: " + process.env.BASE_URL);
   return process.env.BASE_URL as string;
-}
-
-export async function url_encode(message: string) {
-  message.replaceAll(":", "%3A").replaceAll("/", "%2F");
-  return message;
 }

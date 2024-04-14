@@ -85,11 +85,14 @@
   margin-right: 10px;
   background-color: transparent;
   border: 0px transparent;
+  transition: 0.2s all ease-in-out;
 }
 
 .button:hover {
   color: gray;
   cursor: pointer;
+  transition: 0.2s all ease-in-out;
+  transform: scale(1.1);
 }
 
 .button:active {
