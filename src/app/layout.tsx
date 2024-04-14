@@ -1,9 +1,6 @@
-import { SettingOutlined } from "@ant-design/icons";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Link from "next/link";
-import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 // Opt out of caching for all data requests in the route segment
