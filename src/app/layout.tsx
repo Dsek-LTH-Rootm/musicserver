@@ -30,7 +30,7 @@ export default function RootLayout({
             className="transform transition hover:scale-105 hover:text-gray-400"
           >
             <Image
-              src="/sigill-adobe-garamond.png"
+              src="/sigill-adobe-garamond.jpg"
               alt="D-sek logo"
               width="64"
               height="64"
