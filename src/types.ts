@@ -198,3 +198,11 @@ export interface userinfo {
   family_name: string;
   email: string;
 }
+
+export interface Settings {
+  votingEnabled: boolean;
+  guestsOrAccountsOnly: boolean;
+  accountsOnly: boolean;
+  banned_users: string[];
+  admin_roles: string[];
+}

@@ -12,12 +12,13 @@
     "@ant-design/icons": "^5.2.6",
     "@spotify/web-api-ts-sdk": "^1.1.2",
     "axios": "^1.5.1",
-    "framer-motion": "^10.16.4",
     "jwt-decode": "^4.0.0",
     "next": "^14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "sharp": "^0.32.6"
+    "sharp": "^0.32.6",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "^20",
