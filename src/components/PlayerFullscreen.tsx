@@ -16,7 +16,7 @@ export default function PlayerFullscreen() {
 
   const getCurrentlyPlaying = async () => {
     const data = await getCurrentStatus();
-    if (data !== undefined) {
+    if (data !== false && data !== undefined) {
       setCurrentTrack(data);
     }
   };
