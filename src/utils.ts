@@ -23,29 +23,28 @@ export async function getRedirectUri() {
 
 export async function getSettings() {
   try {
-    log(process.cwd());
-    const file = await fs.readFile(
-      process.cwd() + "/app/settings.json",
-      "utf8",
-    );
+    const file = await fs.readFile(process.cwd() + "/settings.json", "utf8");
     const settings: Settings = JSON.parse(file);
     return settings;
   } catch (err: any) {
     // If failed, and probably due to there not being a setting file previously, create a new one
-    if (err.code === "EONENT") {
+    if (err.code === "ENOENT") {
       log("Settings file not found, creating a new one");
-      const newSettings: Settings = {
-        votingEnabled: false,
-        guestsOrAccountsOnly: false,
-        accountsOnly: false,
-        banned_users: [],
-        admin_roles: [],
-      };
-      await fs.writeFile(
-        process.cwd() + "/app/settings.json",
-        JSON.stringify(newSettings),
-        "utf8",
-      );
+      await fs
+        .writeFile(
+          process.cwd() + "/settings.json",
+          JSON.stringify({
+            votingEnabled: "false",
+            enableGuests: "false",
+            requireAccount: "false",
+            bannedUsers: [],
+            enableAdminRoles: [],
+          }),
+          "utf8"
+        )
+        .catch((err) => {
+          console.log(err);
+        });
       return getSettings();
     }
   }
@@ -53,8 +52,8 @@ export async function getSettings() {
 
 export async function updateSettings(updatedSettings: Settings) {
   await fs.writeFile(
-    process.cwd() + "/app/settings.json",
+    process.cwd() + "/settings.json",
     JSON.stringify(updatedSettings),
-    "utf8",
+    "utf8"
   );
 }

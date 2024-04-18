@@ -23,7 +23,7 @@ export class Toast extends React.Component {
 
   static add(message: string, options: any = null) {
     let duration = 5;
-    let color;
+    let color = "green";
 
     if (options) {
       if (options.duration) {
@@ -47,6 +47,10 @@ export class Toast extends React.Component {
       }
     }
 
+    if (message == "Insufficient permissions") {
+      color = "red";
+    }
+
     if (Toast.currentToast) {
       Toast.remove();
     }
@@ -54,7 +58,7 @@ export class Toast extends React.Component {
     const toastContainer = createRoot(
       document.getElementById("toast-container") as HTMLElement
     );
-    toastContainer.render(<ToastComponent message={message} />);
+    toastContainer.render(<ToastComponent message={message} color={color} />);
 
     Toast.currentToast = true;
     Toast.timeout = setTimeout(Toast.remove, duration * 1000);

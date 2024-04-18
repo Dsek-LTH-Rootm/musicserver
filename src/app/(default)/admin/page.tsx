@@ -1,50 +1,135 @@
 import { getAccessToken, removeAccessToken } from "@/API";
+import { auth } from "@/auth";
 import SpotifyAuth from "@/components/SpotifyAuth";
-import { Settings } from "@/types";
+import { JwtToken, Settings } from "@/types";
 import { getSettings, updateSettings } from "@/utils";
+import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
   const spotifyLoggedIn = await getAccessToken();
   const settings = await getSettings();
-  console.log(settings);
+  const jwt = cookies().get("jwt")?.value;
+  const authenticated = jwt ? await auth(jwt) : undefined;
+  const roles = jwt ? (jwtDecode(jwt) as JwtToken).group_list : null;
+  const admin =
+    roles != null
+      ? roles
+          .map((role) => {
+            if (settings?.enableAdminRoles.includes(role)) return true;
+          })
+          .includes(true)
+      : false;
+
+  const OptionContainer = ({
+    name,
+    text,
+    value,
+    type,
+  }: {
+    name: string;
+    text: string;
+    value: string;
+    type: string;
+  }) => {
+    return (
+      <div className="flex justify-between w-full">
+        <label htmlFor={name}>{text}</label>
+        {type == "checkbox" && (
+          <input
+            type={type}
+            name={name}
+            defaultChecked={value == "on" ? true : false}
+          />
+        )}
+        {type == "text" && (
+          <input type={type} name={name} defaultValue={value} />
+        )}
+      </div>
+    );
+  };
 
   return (
     <main className="flex h-screen flex-col items-center *:text-white">
       <div className="w-full *:text-xl sm:w-1/3">
         <h1 className="mb-4 text-center !text-3xl">Settings</h1>
-        {settings && (
+        {authenticated && admin && settings && (
+          <form
+            className="flex flex-col justify-between"
+            action={async (formData: FormData) => {
+              "use server";
+              const newSettings: Settings = {
+                votingEnabled: formData.get("votingEnabled") as string,
+                enableGuests: formData.get("enableGuests") as string,
+                requireAccount: formData.get("requireAccount") as string,
+                bannedUsers: (formData.get("bannedUsers") as string).split(","),
+                enableAdminRoles: (
+                  formData.get("enableAdminRoles") as string
+                ).split(","),
+              };
+
+              updateSettings(newSettings);
+              redirect("/");
+            }}
+          >
+            <OptionContainer
+              name="votingEnabled"
+              text="Enable voting"
+              value={settings.votingEnabled}
+              type="checkbox"
+            />
+            <OptionContainer
+              name="enableGuests"
+              text="Enable guest accounts"
+              value={settings.enableGuests}
+              type="checkbox"
+            />
+            <OptionContainer
+              name="requireAccount"
+              text="Require account"
+              value={settings.requireAccount}
+              type="checkbox"
+            />
+            <OptionContainer
+              name="bannedUsers"
+              text="Banned users"
+              value={settings.bannedUsers.join(",")}
+              type="text"
+            />
+            <OptionContainer
+              name="enableAdminRoles"
+              text="Admin roles"
+              value={settings.enableAdminRoles.join(",")}
+              type="text"
+            />
+            <button
+              type="submit"
+              className="box-border w-full transform bg-slate-400 p-2 transition hover:scale-105"
+            >
+              Apply settings
+            </button>
+          </form>
+        )}
+        {/* Guests have option to login */}
+        {!jwt && cookies().get("user")?.value && (
           <form
             action={async () => {
               "use server";
+              redirect("/login?guest=true");
             }}
+            className="mb-3"
           >
-            <label>
-              Test
-              <input type="checkbox" />
-            </label>
+            <button
+              type="submit"
+              className="box-border w-full transform bg-green-600 p-2 transition hover:scale-105"
+            >
+              Login to account
+            </button>
           </form>
         )}
-        {!cookies().get("accessToken")?.value &&
-          cookies().get("user")?.value && (
-            <form
-              action={async () => {
-                "use server";
-                redirect("/login?guest=true");
-              }}
-              className="mb-3"
-            >
-              <button
-                type="submit"
-                className="box-border w-full transform bg-green-600 p-2 transition hover:scale-105"
-              >
-                Login to account
-              </button>
-            </form>
-          )}
         {!spotifyLoggedIn?.access_token && <SpotifyAuth />}
-        {spotifyLoggedIn?.access_token && (
+        {admin && spotifyLoggedIn?.access_token && (
           <form action={removeAccessToken} className="mt-3">
             <button
               type="submit"

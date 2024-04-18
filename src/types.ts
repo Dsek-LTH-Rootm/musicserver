@@ -176,7 +176,7 @@ export interface PlaylistBase {
   uri: string;
 }
 
-export interface userinfo {
+export interface JwtToken {
   exp: number;
   iat: number;
   auth_time: number;
@@ -200,9 +200,9 @@ export interface userinfo {
 }
 
 export interface Settings {
-  votingEnabled: boolean;
-  guestsOrAccountsOnly: boolean;
-  accountsOnly: boolean;
-  banned_users: string[];
-  admin_roles: string[];
+  votingEnabled: string;
+  enableGuests: string;
+  requireAccount: string;
+  bannedUsers: string[];
+  enableAdminRoles: string[];
 }

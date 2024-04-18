@@ -1,12 +1,12 @@
-import styles from './view.module.css';
-import { PlaylistBase } from '@/types';
-import { addToQueue, play } from '@/API';
-import ViewTrack from './view_items/ViewTrack';
-import { SimplifiedAlbum, Track } from '@spotify/web-api-ts-sdk';
-import { pickProp } from './Browse';
-import ViewPlaylist from './view_items/ViewPlaylist';
-import ViewAlbum from './view_items/ViewAlbum';
-import { Toast } from './Toast';
+import styles from "./view.module.css";
+import { PlaylistBase } from "@/types";
+import { addToQueue, play } from "@/API";
+import ViewTrack from "./view_items/ViewTrack";
+import { SimplifiedAlbum, Track } from "@spotify/web-api-ts-sdk";
+import { pickProp } from "./Browse";
+import ViewPlaylist from "./view_items/ViewPlaylist";
+import ViewAlbum from "./view_items/ViewAlbum";
+import { Toast } from "./Toast";
 
 export interface trackProp {
   track: Track;
@@ -25,36 +25,45 @@ export interface albumProp {
 }
 
 export default function View({ props }: pickProp) {
+  const addToQueueHandler = async (uri: string) => {
+    const success = await addToQueue(uri);
+    if (success) {
+      Toast.add("Track added to queue");
+    } else {
+      Toast.add("Insufficient permissions", { type: "error" });
+    }
+  };
 
-  const addToQueueHandler = (uri: string) => {
-    Toast.add("Track added to queue");
-    addToQueue(uri);
-  }
-
-  const playHandler = (uri: string, shuffle: boolean) => {
-    Toast.add("Cleared queue and started playing");
-    play(uri, shuffle);
-  } 
+  const playHandler = async (uri: string, shuffle: boolean) => {
+    const success = await play(uri, shuffle);
+    if (success) {
+      Toast.add("Cleared queue and started playing");
+    } else {
+      Toast.add("Insufficient permissions", { type: "error" });
+    }
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.rowContainer}>
         <h3 className={styles.rowTitle}>Tracks</h3>
-        {props?.tracks?.items.map((track: Track, index: number) =>
+        {props?.tracks?.items.map((track: Track, index: number) => (
           <ViewTrack key={index} track={track} func={addToQueueHandler} />
-        )}
+        ))}
       </div>
       <div className={styles.rowContainer}>
         <h3 className={styles.rowTitle}>Playlists</h3>
-        {props?.playlists?.items.map((playlist: PlaylistBase, index: number) =>
-          <ViewPlaylist key={index} playlist={playlist} func={playHandler} />
+        {props?.playlists?.items.map(
+          (playlist: PlaylistBase, index: number) => (
+            <ViewPlaylist key={index} playlist={playlist} func={playHandler} />
+          )
         )}
       </div>
       <div className={styles.rowContainer}>
         <h3 className={styles.rowTitle}>Albums</h3>
-        {props?.albums?.items.map((album: SimplifiedAlbum, index: number) =>
+        {props?.albums?.items.map((album: SimplifiedAlbum, index: number) => (
           <ViewAlbum key={index} album={album} func={playHandler} />
-        )}
+        ))}
       </div>
     </div>
   );
