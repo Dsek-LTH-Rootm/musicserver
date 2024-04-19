@@ -2,6 +2,10 @@
 
 Non-commercial music server which is to be used for playing, selecting, and performing actions on Spotify which is being hosted on 1 device. To use this, the user needs to have a premium Spotify account.
 
+Sites:
+<br>
+[music.dsek.se](https://music.dsek.se/)
+
 ## Getting Started
 
 First, install all dependencies used in the project:
