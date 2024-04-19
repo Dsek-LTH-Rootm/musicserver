@@ -34,9 +34,9 @@ export async function getSettings() {
         .writeFile(
           process.cwd() + "/settings.json",
           JSON.stringify({
-            votingEnabled: "false",
-            enableGuests: "false",
-            requireAccount: "false",
+            votingEnabled: null,
+            enableGuests: null,
+            requireAccount: null,
             bannedUsers: [],
             enableAdminRoles: [],
           }),
