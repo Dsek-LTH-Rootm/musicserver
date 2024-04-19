@@ -3,19 +3,27 @@
 import axios from "axios";
 import { verify } from "jsonwebtoken";
 import { getSettings } from "./utils";
+import { jwtDecode } from "jwt-decode";
+import { JwtToken } from "./types";
 
 export async function permission(
   guest: string | undefined,
   jwt: string | undefined
 ) {
   const settings = await getSettings();
+  if (
+    jwt &&
+    (await auth(jwt)) &&
+    settings?.bannedUsers.find(
+      (name) => name == (jwtDecode(jwt) as JwtToken).preferred_username
+    ) != undefined
+  ) {
+    return false;
+  }
 
   // If no account is required, allow everyone
   if (!settings?.requireAccount) return true;
-  console.log(jwt);
-  console.log(await auth(jwt as string));
   if (jwt && (await auth(jwt))) {
-    console.log("OK PERMS ACCOUNT");
     return true;
   } else if (settings.enableGuests && guest && guest.length > 4) {
     return true;

@@ -1,5 +1,5 @@
 import { getAccessToken, removeAccessToken } from "@/API";
-import { auth } from "@/auth";
+import { auth, permission } from "@/auth";
 import SpotifyAuth from "@/components/SpotifyAuth";
 import { JwtToken, Settings } from "@/types";
 import { getSettings, updateSettings } from "@/utils";
@@ -11,7 +11,9 @@ export default async function AdminPage() {
   const spotifyLoggedIn = await getAccessToken();
   const settings = await getSettings();
   const jwt = cookies().get("jwt")?.value;
-  const authenticated = jwt ? await auth(jwt) : undefined;
+  // Authenticated / permission
+  const authenticated = await permission(undefined, jwt);
+  // Check if user has any admin roles
   const roles = jwt ? (jwtDecode(jwt) as JwtToken).group_list : null;
   const admin =
     roles != null
@@ -34,7 +36,7 @@ export default async function AdminPage() {
     type: string;
   }) => {
     return (
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full mb-2">
         <label htmlFor={name}>{text}</label>
         {type == "checkbox" && (
           <input
@@ -44,7 +46,12 @@ export default async function AdminPage() {
           />
         )}
         {type == "text" && (
-          <input type={type} name={name} defaultValue={value} />
+          <input
+            type={type}
+            name={name}
+            defaultValue={value}
+            className="text-sm w-2/3 overflow-y-auto"
+          />
         )}
       </div>
     );
@@ -52,7 +59,7 @@ export default async function AdminPage() {
 
   return (
     <main className="flex h-screen flex-col items-center *:text-white">
-      <div className="w-full *:text-xl sm:w-1/3">
+      <div className="w-full *:text-xl lg:w-1/2 sm:w-2/3">
         <h1 className="mb-4 text-center !text-3xl">Settings</h1>
         {authenticated && admin && settings && (
           <form

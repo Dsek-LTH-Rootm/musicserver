@@ -23,7 +23,7 @@ export class Toast extends React.Component {
 
   static add(message: string, options: any = null) {
     let duration = 5;
-    let color = "green";
+    let color = "light-green";
 
     if (options) {
       if (options.duration) {
