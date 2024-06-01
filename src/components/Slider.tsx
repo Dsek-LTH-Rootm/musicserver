@@ -30,7 +30,7 @@ export default function Slider() {
         min={0}
         max={100}
         step={1}
-        value={value}
+        value={Number.isNaN(value) ? 0 : value}
         onChange={valueChanged}
       />
     </div>

@@ -1,8 +1,7 @@
 import { getAccessToken } from "@/API";
 import styles from "./page.module.css";
-import Browse from "@/components/Browse";
 import Player from "@/components/Player";
-import { ToastContainer } from "@/components/ToastContainer";
+import ViewQueue from "@/components/ViewQueue";
 
 export default async function Home() {
   const accesToken = await getAccessToken();
@@ -15,9 +14,8 @@ export default async function Home() {
   }
   return (
     <main className={styles.main}>
-      <Browse />
+      <ViewQueue />
       <Player />
-      <ToastContainer />
     </main>
   );
 }

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { SettingOutlined } from "@ant-design/icons";
+import { HomeFilled, SearchOutlined, SettingOutlined } from "@ant-design/icons";
 import { getWord } from "@/words";
 import { userinfo } from "@/types";
 import { jwtDecode } from "jwt-decode";
+import { ToastContainer } from "@/components/ToastContainer";
 
 export default async function DefaultLayout({
   children,
@@ -24,23 +25,54 @@ export default async function DefaultLayout({
       return "Not signed in";
     }
   };
+
   return (
     <>
-      <nav className="m-4 flex w-screen items-center font-mono *:text-sm min-[340px]:*:text-xl sm:*:text-3xl">
-        <Link
-          href="/"
-          className="transform transition hover:scale-105 hover:text-gray-400"
-        >
-          Music server
-        </Link>
-        <div className="absolute right-0 mr-4 flex">
-          <span className="!text-lg mr-4">{await getUser()}</span>
+      <ToastContainer />
+      <nav>
+        <div className="m-4 flex w-screen items-center font-mono *:text-sm min-[340px]:*:text-xl sm:*:text-3xl">
           <Link
-            href="/admin"
+            href="/"
             className="transform transition hover:scale-105 hover:text-gray-400"
           >
-            <SettingOutlined className="flex aspect-square h-full justify-center" />
+            Music server
           </Link>
+          <div className="absolute right-0 mr-4 flex">
+            <span className="!text-lg mr-4">{await getUser()}</span>
+            <Link
+              href="/admin"
+              className="transform transition hover:scale-105 hover:text-gray-400 hover:rotate-90"
+            >
+              <SettingOutlined className="flex aspect-square h-full justify-center" />
+            </Link>
+          </div>
+        </div>
+        <div className="m-4 flex w-screen items-center font-mono *:text-sm min-[340px]:*:text-xl sm:*:text-3xl">
+          <Link
+            href="/"
+            className="transform transition hover:scale-105 hover:text-gray-400 mr-3"
+          >
+            <HomeFilled className="flex aspect-square h-full justify-center" />
+          </Link>
+          <form
+            action="/results"
+            className="flex flex-col items-end w-full h-full justify-center pr-8"
+          >
+            <div className="h-[50px] text-[1.4em] flex flex-row border sm:w-[500px] w-full border-[rgb(87, 87, 87)] border-2 border-solid rounded-[10px] box-border overflow-hidden border-gray-500 transition ease-in-out active:border-white focus-within:border-white">
+              <input
+                type="text"
+                name="search"
+                className="flex justify-items-center items-center text-base h-full w-full pl-[10px] pr-[10px] bg-black box-border outline-none text-white transition ease-in-out"
+                placeholder="Search"
+              />
+              <button
+                type="submit"
+                className="w-auto bg-black h-full aspect-square text-2xl border border-transparent border-l-gray-400 text-white z-10 hover:bg-gray-800 focus:bg-gray-800"
+              >
+                <SearchOutlined className="pl-[10px] pr-[10px] h-full text-base justify-center items-center flex w-auto" />
+              </button>
+            </div>
+          </form>
         </div>
       </nav>
       {children}

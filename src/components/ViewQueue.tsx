@@ -1,18 +1,14 @@
-import { useEffect, useState } from 'react';
-import styles from './view.module.css';
-import { songQueue, track } from '@/types';
-import ViewTrack from './view_items/ViewTrack';
-import { getQueue, play } from '@/API';
-import { Episode, Queue } from '@spotify/web-api-ts-sdk';
-import { Track } from '@spotify/web-api-ts-sdk';
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+"use client";
+import { useEffect, useState } from "react";
+import styles from "./view.module.css";
+import ViewTrack from "./view_items/ViewTrack";
+import { getQueue, play } from "@/API";
+import { Queue } from "@spotify/web-api-ts-sdk";
+import { Track } from "@spotify/web-api-ts-sdk";
+import { LoadingOutlined } from "@ant-design/icons";
 
-interface viewQueueProp {
-  show: boolean;
-}
-
-export default function ViewQueue({ show }: viewQueueProp) {
-  const [tracks, setTracks] = useState<Track[]>()
+export default function ViewQueue() {
+  const [tracks, setTracks] = useState<Track[]>();
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -35,7 +31,7 @@ export default function ViewQueue({ show }: viewQueueProp) {
         if (loading) setLoading(false);
       });
     }, 1000);
-  }, [])
+  }, []);
 
   return (
     <>
@@ -50,13 +46,16 @@ export default function ViewQueue({ show }: viewQueueProp) {
             <div className={styles.rowButtonContainer}>
               <h3 className={styles.rowTitle}>Queue</h3>
             </div>
-            <ViewTrack track={currentTrack as Track} func={play} showButton={false} />
-            {tracks?.map((track: Track, index: number, tracks: Track[]) =>
-              <ViewTrack key={index} track={track} func={play} showButton={false} />
-            )}
+            <div className="mb-4 bg-[#333] rounded-sm">
+              <h4 className="font-bold">Currently playing</h4>
+              <ViewTrack track={currentTrack as Track} showButton={false} />
+            </div>
+            {tracks?.map((track: Track, index: number, tracks: Track[]) => (
+              <ViewTrack key={index} track={track} showButton={false} />
+            ))}
           </div>
         </div>
       )}
     </>
-  )
+  );
 }

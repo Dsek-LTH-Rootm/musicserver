@@ -1,22 +1,39 @@
+"use client";
 import styles from "../view.module.css";
 import { PlusCircleFilled } from "@ant-design/icons";
-import { trackProp } from "../View";
-import { SimplifiedArtist } from "@spotify/web-api-ts-sdk";
+import { SimplifiedArtist, Track } from "@spotify/web-api-ts-sdk";
 import Image from "next/image";
+import { useFormState } from "react-dom";
+import { addToQueueHandler } from "@/utils";
+import { useEffect } from "react";
+import { Toast } from "../Toast";
 
-interface propsArtist {
-  artist: SimplifiedArtist;
-  index: number;
-  artists: SimplifiedArtist[];
-}
+export default function ViewTrack({
+  track,
+  showButton,
+}: {
+  track: Track;
+  showButton?: boolean;
+}) {
+  const [state, formAction] = useFormState(addToQueueHandler, {
+    success: false,
+  });
 
-export default function ViewTrack({ track, func, showButton }: trackProp) {
+  useEffect(() => {
+    if (state.success) {
+      Toast.add("Track added to queue");
+    }
+  }, [state]);
+
   return (
     <div className={styles.smallContainer}>
       {showButton !== false && (
-        <button className={styles.button} onClick={() => func(track?.uri)}>
-          <PlusCircleFilled className="justify-center" />
-        </button>
+        <form action={formAction}>
+          <input type="hidden" name="uri" value={track?.uri} />
+          <button type="submit" className={styles.button}>
+            <PlusCircleFilled className="justify-center" />
+          </button>
+        </form>
       )}
       <a
         className={styles.cover}
@@ -25,6 +42,7 @@ export default function ViewTrack({ track, func, showButton }: trackProp) {
       >
         <Image
           fill={true}
+          sizes="50px"
           alt="Song's album cover art"
           src={track?.album?.images[0]?.url}
           className={styles.cover}
@@ -42,16 +60,15 @@ export default function ViewTrack({ track, func, showButton }: trackProp) {
           (
             artist: SimplifiedArtist,
             index2: number,
-            artists: SimplifiedArtist[],
+            artists: SimplifiedArtist[]
           ) => (
-            // getArtist(artist, index2, artists)
             <GetArtist
               key={index2}
               artist={artist}
               index={index2}
               artists={artists}
             />
-          ),
+          )
         )}
       </div>
       <p className={styles.duration}>{getTime(track?.duration_ms)}</p>
@@ -69,7 +86,15 @@ export function getTime(originalTime: number) {
   return minutesString + ":" + secondsString;
 }
 
-export function GetArtist({ artist, index, artists }: propsArtist) {
+export function GetArtist({
+  artist,
+  index,
+  artists,
+}: {
+  artist: SimplifiedArtist;
+  index: number;
+  artists: SimplifiedArtist[];
+}) {
   if (index == artists.length - 1) {
     return (
       <p>

@@ -1,5 +1,7 @@
 "use server";
 
+import { addToQueue, play } from "./API";
+
 export async function log(message: string) {
   console.log(new Date().toUTCString() + ": " + message);
 }
@@ -18,3 +20,24 @@ export async function getRedirectUri() {
   log("Retrieving redirect uri: " + process.env.BASE_URL);
   return process.env.BASE_URL as string;
 }
+
+export const addToQueueHandler = async (prevState: any, formData: FormData) => {
+  "use server";
+  const uri = formData.get("uri");
+  if (!uri) return { success: false };
+  addToQueue(uri.toString());
+  return {
+    success: true,
+  };
+};
+
+export const playHandler = async (prevState: any, formData: FormData) => {
+  "use server";
+  const uri = formData.get("uri");
+  const shuffle = formData.get("shuffle");
+  if (!uri || !shuffle) return { success: false };
+  play(uri.toString(), shuffle.toString() == "1");
+  return {
+    success: true,
+  };
+};
