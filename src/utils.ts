@@ -1,4 +1,6 @@
 "use server";
+import { promises as fs } from "fs";
+import { Settings } from "./types";
 
 import { addToQueue, play } from "./API";
 
@@ -41,3 +43,39 @@ export const playHandler = async (prevState: any, formData: FormData) => {
     success: true,
   };
 };
+export async function getSettings() {
+  try {
+    const file = await fs.readFile(process.cwd() + "/settings.json", "utf8");
+    const settings: Settings = JSON.parse(file);
+    return settings;
+  } catch (err: any) {
+    // If failed, and probably due to there not being a setting file previously, create a new one
+    if (err.code === "ENOENT") {
+      log("Settings file not found, creating a new one");
+      await fs
+        .writeFile(
+          process.cwd() + "/settings.json",
+          JSON.stringify({
+            votingEnabled: null,
+            enableGuests: null,
+            requireAccount: null,
+            bannedUsers: [],
+            enableAdminRoles: [],
+          }),
+          "utf8"
+        )
+        .catch((err) => {
+          console.log(err);
+        });
+      return getSettings();
+    }
+  }
+}
+
+export async function updateSettings(updatedSettings: Settings) {
+  await fs.writeFile(
+    process.cwd() + "/settings.json",
+    JSON.stringify(updatedSettings),
+    "utf8"
+  );
+}

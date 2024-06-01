@@ -26,34 +26,53 @@ export default function Player() {
 
   const getCurrentlyPlaying = async () => {
     const data = await getCurrentStatus();
-    if (data !== undefined) {
+    if (data !== false && data !== undefined) {
       setCurrentTrack(data);
       setPlaying(data?.is_playing);
     }
   };
 
-  const back = () => {
-    setPlaying(true);
-    skipBack();
-    Toast.add("Skipped to previous song");
+  const back = async () => {
+    const success = await skipBack();
+    if (success) {
+      setPlaying(true);
+      Toast.add("Skipped to previous song");
+    } else {
+      Toast.add("Insufficient permissions");
+    }
   };
 
-  const resume = () => {
-    setPlaying(true);
-    play();
-    Toast.add("Started playing");
+  const resume = async () => {
+    const success = await play();
+    if (success) {
+      setPlaying(true);
+      play();
+      Toast.add("Started playing");
+    } else {
+      Toast.add("Insufficient permissions");
+    }
   };
 
-  const stop = () => {
-    setPlaying(false);
-    pause();
-    Toast.add("Stopped playing");
+  const stop = async () => {
+    const success = await pause();
+    if (success) {
+      setPlaying(false);
+      pause();
+      Toast.add("Stopped playing");
+    } else {
+      Toast.add("Insufficient permissions");
+    }
   };
 
-  const forward = () => {
-    setPlaying(true);
-    skipNext();
-    Toast.add("Skipped to next song");
+  const forward = async () => {
+    const success = await skipNext();
+    if (success) {
+      setPlaying(true);
+      skipNext();
+      Toast.add("Skipped to next song");
+    } else {
+      Toast.add("Insufficient permissions");
+    }
   };
 
   const hide = () => {

@@ -22,6 +22,8 @@ export default function ViewTrack({
   useEffect(() => {
     if (state.success) {
       Toast.add("Track added to queue");
+    } else {
+      Toast.add("Insufficient permissions", { type: "error" });
     }
   }, [state]);
 

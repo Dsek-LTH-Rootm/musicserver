@@ -16,6 +16,8 @@ export default function ViewPlaylist({ playlist }: { playlist: PlaylistBase }) {
   useEffect(() => {
     if (state.success) {
       Toast.add("Started playing");
+    } else {
+      Toast.add("Insufficient permissions", { type: "error" });
     }
   }, [state]);
 

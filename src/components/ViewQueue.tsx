@@ -15,19 +15,19 @@ export default function ViewQueue() {
   // Continuously fetches queue from server
   useEffect(() => {
     const data = getQueue();
-    data.then((value: Queue | undefined) => {
+    data.then((value: Queue | undefined | boolean) => {
       if (!value) return;
-      setTracks(value.queue as Track[]);
-      setCurrentTrack(value.currently_playing as Track);
+      setTracks((value as Queue).queue as Track[]);
+      setCurrentTrack((value as Queue).currently_playing as Track);
       setLoading(false);
     });
 
     setInterval(() => {
       const data = getQueue();
-      data.then((value: Queue | undefined) => {
+      data.then((value: Queue | undefined | boolean) => {
         if (!value) return;
-        setTracks(value.queue as Track[]);
-        setCurrentTrack(value.currently_playing as Track);
+        setTracks((value as Queue).queue as Track[]);
+        setCurrentTrack((value as Queue).currently_playing as Track);
         if (loading) setLoading(false);
       });
     }, 1000);
