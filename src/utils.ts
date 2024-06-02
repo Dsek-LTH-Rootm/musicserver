@@ -2,7 +2,7 @@
 import { promises as fs } from "fs";
 import { Settings } from "./types";
 
-import { addToQueue, play } from "./API";
+import { addToCustomQueue, play, removeFromCustomQueue } from "./API";
 
 export async function log(message: string) {
   console.log(new Date().toUTCString() + ": " + message);
@@ -25,24 +25,38 @@ export async function getRedirectUri() {
 
 export const addToQueueHandler = async (prevState: any, formData: FormData) => {
   "use server";
-  const uri = formData.get("uri");
-  if (!uri) return { success: false };
-  addToQueue(uri.toString());
-  return {
-    success: true,
-  };
+  const data = formData.get("track");
+  if (!data) return { success: false, message: "Invalid parameters" };
+  const track = JSON.parse(data.toString());
+  addToCustomQueue(track);
+  return { success: true };
 };
 
 export const playHandler = async (prevState: any, formData: FormData) => {
   "use server";
   const uri = formData.get("uri");
   const shuffle = formData.get("shuffle");
-  if (!uri || !shuffle) return { success: false };
+  if (!uri || !shuffle)
+    return { success: false, message: "Invalid parameters" };
   play(uri.toString(), shuffle.toString() == "1");
-  return {
-    success: true,
-  };
+  return { success: true };
 };
+
+export const removeTrackHandler = async (
+  prevState: any,
+  formData: FormData
+) => {
+  "use server";
+  const data = formData.get("index");
+  if (!data) return { success: false, message: "Invalid parameters" };
+  try {
+    removeFromCustomQueue(Number.parseInt(data.toString()));
+  } catch {
+    return { success: false, message: "Unable to parse index" };
+  }
+  return { success: true };
+};
+
 export async function getSettings() {
   try {
     const file = await fs.readFile(process.cwd() + "/settings.json", "utf8");

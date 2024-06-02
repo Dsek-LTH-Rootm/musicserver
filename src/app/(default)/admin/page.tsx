@@ -58,7 +58,7 @@ export default async function AdminPage() {
   };
 
   return (
-    <main className="flex h-screen flex-col items-center *:text-white">
+    <div className="flex h-screen flex-col items-center *:text-white">
       <div className="w-full *:text-xl lg:w-1/2 sm:w-2/3">
         <h1 className="mb-4 text-center !text-3xl">Settings</h1>
         {authenticated && admin && settings && (
@@ -147,6 +147,6 @@ export default async function AdminPage() {
           </form>
         )}
       </div>
-    </main>
+    </div>
   );
 }

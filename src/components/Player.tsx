@@ -68,7 +68,6 @@ export default function Player() {
     const success = await skipNext();
     if (success) {
       setPlaying(true);
-      skipNext();
       Toast.add("Skipped to next song");
     } else {
       Toast.add("Insufficient permissions");

@@ -1,37 +1,51 @@
 "use client";
 import styles from "../view.module.css";
-import { PlusCircleFilled } from "@ant-design/icons";
+import { PlusCircleFilled, MinusCircleFilled } from "@ant-design/icons";
 import { SimplifiedArtist, Track } from "@spotify/web-api-ts-sdk";
 import Image from "next/image";
 import { useFormState } from "react-dom";
-import { addToQueueHandler } from "@/utils";
+import { addToQueueHandler, removeTrackHandler } from "@/utils";
 import { useEffect } from "react";
 import { Toast } from "../Toast";
 
 export default function ViewTrack({
   track,
   showButton,
+  customQueueIndex,
 }: {
   track: Track;
   showButton?: boolean;
+  customQueueIndex?: number;
 }) {
   const [state, formAction] = useFormState(addToQueueHandler, {
+    success: false,
+  });
+  const [removeState, removeFormAction] = useFormState(removeTrackHandler, {
     success: false,
   });
 
   useEffect(() => {
     if (state.success) {
       Toast.add("Track added to queue");
-    } else {
-      Toast.add("Insufficient permissions", { type: "error" });
+    } else if (state.message) {
+      Toast.add(state.message, { type: "error" });
     }
   }, [state]);
+
+  useEffect(() => {
+    if (state.success) {
+      Toast.add("Track removed from queue");
+    } else if (state.message) {
+      Toast.add(state.message, { type: "error" });
+    }
+  }, [removeState]);
 
   return (
     <div className={styles.smallContainer}>
       {showButton !== false && (
         <form action={formAction}>
-          <input type="hidden" name="uri" value={track?.uri} />
+          {/* <input type="hidden" name="uri" value={track?.uri} /> */}
+          <input type="hidden" name="track" value={JSON.stringify(track)} />
           <button type="submit" className={styles.button}>
             <PlusCircleFilled className="justify-center" />
           </button>
@@ -73,6 +87,14 @@ export default function ViewTrack({
           )
         )}
       </div>
+      {customQueueIndex && (
+        <form action={removeFormAction}>
+          <input type="hidden" name="index" value={customQueueIndex} />
+          <button type="submit" className={styles.button}>
+            <MinusCircleFilled className="justify-center" />
+          </button>
+        </form>
+      )}
       <p className={styles.duration}>{getTime(track?.duration_ms)}</p>
     </div>
   );

@@ -3,6 +3,7 @@ import {
   SpotifyApi,
   AccessToken,
   PlaybackState,
+  Track,
 } from "@spotify/web-api-ts-sdk";
 import { execSync } from "child_process";
 import { cookies, headers } from "next/headers";
@@ -10,10 +11,12 @@ import type { Queue } from "@spotify/web-api-ts-sdk";
 import { log } from "./utils";
 import { redirect } from "next/navigation";
 import { permission } from "./auth";
+import { SongQueue } from "./types";
 
 let sdk: SpotifyApi | undefined;
 let active_device: string | null;
 let lastCalls = new Map<string, number>();
+let customQueue: Track[] = [];
 
 export async function updateAccessToken(accessToken: AccessToken) {
   if (accessToken.access_token === "emptyAccessToken") {
@@ -47,7 +50,17 @@ export async function search(query: string) {
   }
 }
 
-export async function addToQueue(uri: string) {
+export async function removeFromCustomQueue(index: number) {
+  try {
+    log("Removed song from queue");
+    customQueue.splice(index, 1);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function addToCustomQueue(track: Track) {
   try {
     if (
       !(await permission(
@@ -56,8 +69,26 @@ export async function addToQueue(uri: string) {
       ))
     )
       return false;
-    await sdk?.player?.addItemToPlaybackQueue(uri, active_device!);
-    log("Added to queue");
+    customQueue.push(track);
+    log("Added to custom queue");
+    return true;
+  } catch (error: any) {
+    console.log(error);
+    activateDevice();
+  }
+}
+
+export async function addToSpotifyQueue(track: Track) {
+  try {
+    if (
+      !(await permission(
+        cookies().get("user")?.value,
+        cookies().get("jwt")?.value
+      ))
+    )
+      return false;
+    await sdk?.player?.addItemToPlaybackQueue(track.uri, active_device!);
+    log("Added to spotify queue");
     return true;
   } catch (error: any) {
     console.log(error);
@@ -74,6 +105,9 @@ export async function skipNext() {
       ))
     )
       return false;
+    if (customQueue.length > 0) {
+      await addToSpotifyQueue(customQueue.shift() as Track);
+    }
     await sdk?.player?.skipToNext(active_device!);
     log("Skipped next");
     return true;
@@ -110,7 +144,6 @@ export async function play(context_uri?: string, shuffle?: boolean) {
       return false;
     await sdk?.player.startResumePlayback(active_device!, context_uri);
     if (context_uri && shuffle) {
-      // need to turn off and on shuffle for spotify to shuffle
       await sdk?.player?.togglePlaybackShuffle(true);
     } else {
       await sdk?.player?.togglePlaybackShuffle(false);
@@ -159,12 +192,16 @@ export async function getQueue() {
     if (!sdk) return false;
     headers();
     const q = lastCalls.get("queue");
-    if ((q && Date.now() - q > 10000) || !q) {
+    if ((q && Date.now() - q > 5000) || !q) {
       queue = await sdk?.player?.getUsersQueue();
       lastCalls.set("queue", Date.now());
       log("Got queue");
     }
-    return queue;
+    const s: SongQueue = {
+      queue: queue ?? undefined,
+      customQueue,
+    };
+    return s;
   } catch (error: any) {
     console.log(error);
   }
@@ -184,10 +221,16 @@ export async function getCurrentStatus() {
     if (!sdk) return false;
     headers();
     const s = lastCalls.get("status");
-    if ((s && Date.now() - s > 10000) || !s) {
+    if ((s && Date.now() - s > 5000) || !s) {
       playback = await sdk?.player?.getCurrentlyPlayingTrack();
       lastCalls.set("status", Date.now());
       log("Got playback state");
+      if (
+        playback?.item.duration_ms - playback?.progress_ms < 6000 &&
+        customQueue.length > 0
+      ) {
+        await addToSpotifyQueue(customQueue.shift() as Track);
+      }
     }
 
     return playback;

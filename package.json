@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.2.6",
+    "@ant-design/icons": "^5.3.7",
     "@spotify/web-api-ts-sdk": "^1.1.2",
     "@types/jsonwebtoken": "^9.0.6",
     "axios": "^1.5.1",
@@ -18,7 +18,8 @@
     "next": "^14.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sharp": "^0.32.6"
+    "sharp": "^0.32.6",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -22,7 +22,7 @@ export default function PlayerFullscreen() {
   };
 
   return (
-    <main>
+    <div>
       {currentTrack && (
         <div className={styles.container}>
           <div
@@ -50,6 +50,6 @@ export default function PlayerFullscreen() {
           <Link href="/">Home</Link>
         </>
       )}
-    </main>
+    </div>
   );
 }

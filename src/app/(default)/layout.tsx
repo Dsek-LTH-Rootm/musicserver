@@ -5,6 +5,7 @@ import { getWord } from "@/words";
 import { JwtToken } from "@/types";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "@/components/ToastContainer";
+import Player from "@/components/Player";
 
 export default async function DefaultLayout({
   children,
@@ -27,7 +28,7 @@ export default async function DefaultLayout({
   };
 
   return (
-    <>
+    <main>
       <ToastContainer />
       <nav>
         <div className="m-4 flex w-screen items-center font-mono *:text-sm min-[340px]:*:text-xl sm:*:text-3xl">
@@ -75,7 +76,8 @@ export default async function DefaultLayout({
           </form>
         </div>
       </nav>
-      {children}
-    </>
+      <div className="h-full overflow-y-scroll">{children}</div>
+      <Player />
+    </main>
   );
 }

@@ -1,6 +1,6 @@
 import styles from "./view.module.css";
 import { PlaylistBase } from "@/types";
-import { addToQueue, play } from "@/API";
+import { addToCustomQueue, play } from "@/API";
 import ViewTrack from "./view_items/ViewTrack";
 import {
   PartialSearchResult,

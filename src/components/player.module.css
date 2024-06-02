@@ -1,5 +1,4 @@
 .container {
-  bottom: 0px;
   height: 50px;
   width: 100%;
   box-sizing: content-box;
@@ -7,9 +6,10 @@
   overflow: visible;
   z-index: 10;
   background-color: black;
-  position: fixed;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
   padding-top: 10px;
+  position: relative;
+  margin-top: -200px;
 }
 
 .button {
@@ -113,11 +113,11 @@
 }
 
 .slider {
-  align-self: center; 
-  height: 30px; 
-  display: flex; 
-  justify-content: center; 
-  margin-left: auto; 
+  align-self: center;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
   margin-right: 10px;
 }
 
@@ -130,7 +130,8 @@
     margin-left: auto;
   }
 
-  .info, .infoHide {
+  .info,
+  .infoHide {
     width: 100%;
   }
 
@@ -141,7 +142,7 @@
 
 @keyframes scrolling-text {
   0% {
-    transform: translateX(0)
+    transform: translateX(0);
   }
 
   100% {
