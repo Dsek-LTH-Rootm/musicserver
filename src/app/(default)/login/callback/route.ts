@@ -7,54 +7,48 @@ import { log } from "@/utils";
 import { headers } from "next/headers";
 
 export async function GET(req: NextRequest) {
-  const callback = async () => {
-    "use server";
-
-    const url = process.env.BASE_URL + "login/callback";
-    const code = req.nextUrl.searchParams.get("code");
-    if (!code) {
-      log("Authentication callback return with empty code");
-      redirect("/login");
-    } else {
-      headers();
-      const token = await axios
-        .post(
-          `${process.env.KEYCLOAK_BASE_URL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
-          {
-            grant_type: "authorization_code",
-            code: code,
-            redirect_uri: url,
-            client_id: process.env.KEYCLOAK_CLIENT as string,
-          },
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          }
-        )
-        .catch((err) => {
-          log("Couldn't get access token");
-          log(err.response.status);
-          log(JSON.stringify(err.response.data));
-        });
-
-      const res = NextResponse.redirect(
-        new URL("/", req.nextUrl.protocol + req.headers.get("host")),
-        { status: 302 }
-      );
-      res.cookies.set(
-        "accessToken",
-        (token as AxiosResponse<any, any>)?.data?.access_token,
+  const url = process.env.BASE_URL + "login/callback";
+  const code = req.nextUrl.searchParams.get("code");
+  if (!code) {
+    log("Authentication callback return with empty code");
+    redirect("/login");
+  } else {
+    headers();
+    const token = await axios
+      .post(
+        `${process.env.KEYCLOAK_BASE_URL}realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
         {
-          httpOnly: true,
-          secure: true,
-          maxAge: 365 * 86400,
+          grant_type: "authorization_code",
+          code: code,
+          redirect_uri: url,
+          client_id: process.env.KEYCLOAK_CLIENT as string,
+        },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
         }
-      );
+      )
+      .catch((err) => {
+        log("Couldn't get access token");
+        log(err.response.status);
+        log(JSON.stringify(err.response.data));
+      });
 
-      return res;
-    }
-  };
+    const res = NextResponse.redirect(
+      new URL("/", req.nextUrl.protocol + req.headers.get("host")),
+      { status: 302 }
+    );
+    res.cookies.set(
+      "jwt",
+      (token as AxiosResponse<any, any>)?.data?.access_token,
+      {
+        httpOnly: true,
+        secure: true,
+        maxAge: 7 * 86400,
+      }
+    );
 
-  return callback();
+    return res;
+  }
 }

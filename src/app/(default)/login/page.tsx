@@ -26,7 +26,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex h-96 w-screen flex-col items-center">
+    <div className="flex h-96 w-screen flex-col items-center">
       <h1 className="mb-6 text-3xl text-center">Login or become a guest</h1>
       <form action={authenticate}>
         <button
@@ -44,6 +44,6 @@ export default function LoginPage() {
           Guest
         </button>
       </form>
-    </main>
+    </div>
   );
 }

@@ -16,13 +16,13 @@ export default function PlayerFullscreen() {
 
   const getCurrentlyPlaying = async () => {
     const data = await getCurrentStatus();
-    if (data !== undefined) {
+    if (data !== false && data !== undefined) {
       setCurrentTrack(data);
     }
   };
 
   return (
-    <main>
+    <div>
       {currentTrack && (
         <div className={styles.container}>
           <div
@@ -50,6 +50,6 @@ export default function PlayerFullscreen() {
           <Link href="/">Home</Link>
         </>
       )}
-    </main>
+    </div>
   );
 }

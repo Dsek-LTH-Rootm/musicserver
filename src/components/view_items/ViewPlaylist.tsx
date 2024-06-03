@@ -1,17 +1,35 @@
+"use client";
 import styles from "../view.module.css";
-import { playlistProp } from "../View";
 import { PlayCircleFilled } from "@ant-design/icons";
 import Image from "next/image";
+import { PlaylistBase } from "@/types";
+import { playHandler } from "@/utils";
+import { useEffect } from "react";
+import { Toast } from "../Toast";
+import { useFormState } from "react-dom";
 
-export default function ViewPlaylist({ playlist, func }: playlistProp) {
+export default function ViewPlaylist({ playlist }: { playlist: PlaylistBase }) {
+  const [state, formAction] = useFormState(playHandler, {
+    success: false,
+  });
+
+  useEffect(() => {
+    if (state.success) {
+      Toast.add("Started playing");
+    } else if (state.message) {
+      Toast.add(state.message);
+    }
+  }, [state]);
+
   return (
     <div className={styles.smallContainer}>
-      <button
-        className={styles.button}
-        onClick={() => func(playlist?.uri, true)}
-      >
-        <PlayCircleFilled />
-      </button>
+      <form action={formAction}>
+        <input type="hidden" name="uri" value={playlist?.uri} />
+        <input type="hidden" name="shuffle" value={1} />
+        <button type="submit" className={styles.button}>
+          <PlayCircleFilled />
+        </button>
+      </form>
       <a
         className={styles.cover}
         target="_blank"
@@ -19,6 +37,7 @@ export default function ViewPlaylist({ playlist, func }: playlistProp) {
       >
         <Image
           fill={true}
+          sizes="50px"
           alt="Playlist's cover art"
           src={playlist?.images[0]?.url}
           className={styles.cover}

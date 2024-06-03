@@ -34,6 +34,8 @@
   /* padding-left: 10px;
   border-left: 1px solid gray; */
   overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
 }
 
 .artist {
@@ -44,9 +46,12 @@
   flex-direction: row;
   /* justify-content: space-evenly; */
   margin-right: 20px;
-  width: 30%;
+  width: 50%;
   padding-left: 10px;
   overflow: hidden;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
 }
 
 .title:hover,
