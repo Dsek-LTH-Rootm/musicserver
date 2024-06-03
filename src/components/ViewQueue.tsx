@@ -52,15 +52,19 @@ export default function ViewQueue() {
               <h4 className="font-bold">Currently playing</h4>
               <ViewTrack track={currentTrack as Track} showButton={false} />
             </div>
-            <h4 className="font-bold">Custom queue</h4>
-            {customTracks?.map((track: Track, index: number) => (
-              <ViewTrack
-                key={index}
-                track={track}
-                showButton={false}
-                customQueueIndex={index}
-              />
-            ))}
+            {customTracks && customTracks.length > 0 && (
+              <>
+                <h4 className="font-bold">User queue</h4>
+                {customTracks.map((track: Track, index: number) => (
+                  <ViewTrack
+                    key={index}
+                    track={track}
+                    showButton={false}
+                    customQueueIndex={index}
+                  />
+                ))}
+              </>
+            )}
             <h4 className="font-bold">Spotify queue</h4>
             {tracks?.map((track: Track, index: number, tracks: Track[]) => (
               <ViewTrack key={index} track={track} showButton={false} />

@@ -50,6 +50,11 @@ export async function search(query: string) {
   }
 }
 
+export async function reorderCustomQueue(fromIndex: number, toIndex: number) {
+  log("Reordering queue");
+  const t = customQueue[toIndex];
+}
+
 export async function removeFromCustomQueue(index: number) {
   try {
     log("Removed song from queue");
@@ -67,6 +72,12 @@ export async function addToCustomQueue(track: Track) {
         cookies().get("user")?.value,
         cookies().get("jwt")?.value
       ))
+    )
+      return false;
+    if (
+      customQueue.find((value: Track, index: number) => {
+        return value.uri == track.uri;
+      })
     )
       return false;
     customQueue.push(track);

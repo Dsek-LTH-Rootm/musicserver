@@ -44,7 +44,6 @@ export default function ViewTrack({
     <div className={styles.smallContainer}>
       {showButton !== false && (
         <form action={formAction}>
-          {/* <input type="hidden" name="uri" value={track?.uri} /> */}
           <input type="hidden" name="track" value={JSON.stringify(track)} />
           <button type="submit" className={styles.button}>
             <PlusCircleFilled className="justify-center" />
@@ -87,14 +86,15 @@ export default function ViewTrack({
           )
         )}
       </div>
-      {customQueueIndex && (
-        <form action={removeFormAction}>
-          <input type="hidden" name="index" value={customQueueIndex} />
-          <button type="submit" className={styles.button}>
-            <MinusCircleFilled className="justify-center" />
-          </button>
-        </form>
-      )}
+      {customQueueIndex &&
+        customQueueIndex !== 0 && ( // TODO: Fix weird bug where a 0 appears for no reason at all
+          <form action={removeFormAction}>
+            <input type="hidden" name="index" value={customQueueIndex} />
+            <button type="submit" className={styles.button}>
+              <MinusCircleFilled className="justify-center" />
+            </button>
+          </form>
+        )}
       <p className={styles.duration}>{getTime(track?.duration_ms)}</p>
     </div>
   );

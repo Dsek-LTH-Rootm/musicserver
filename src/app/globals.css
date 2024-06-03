@@ -25,3 +25,16 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.list-item.drop-zone {
+  background-color: #ccc;
+  transition-property: height padding;
+  transition-duration: 250ms;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  overflow: hidden;
+}
+
+.list-item.drop-zone.hidden {
+  height: 0px;
+  padding: 0px;
+}

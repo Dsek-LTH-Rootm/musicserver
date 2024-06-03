@@ -28,8 +28,8 @@ export const addToQueueHandler = async (prevState: any, formData: FormData) => {
   const data = formData.get("track");
   if (!data) return { success: false, message: "Invalid parameters" };
   const track = JSON.parse(data.toString());
-  addToCustomQueue(track);
-  return { success: true };
+  if (await addToCustomQueue(track)) return { success: true };
+  else return { success: false, message: "Song is already in queue" };
 };
 
 export const playHandler = async (prevState: any, formData: FormData) => {
