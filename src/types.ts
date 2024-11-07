@@ -59,3 +59,8 @@ export interface Settings {
   bannedUsers: string[];
   enableAdminRoles: string[];
 }
+
+export interface APIResponse {
+  success: boolean;
+  message: string;
+}

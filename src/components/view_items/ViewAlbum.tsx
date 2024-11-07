@@ -28,7 +28,10 @@ export default function ViewAlbum({ album }: { album: SimplifiedAlbum }) {
         <input type="hidden" name="uri" value={album?.uri} />
         <input type="hidden" name="shuffle" value={0} />
         <button type="submit" className={styles.button}>
-          <PlayCircleFilled />
+          <PlayCircleFilled
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
         </button>
       </form>
       <a

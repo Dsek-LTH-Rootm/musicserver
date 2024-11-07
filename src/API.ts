@@ -18,6 +18,8 @@ let active_device: string | null;
 let lastCalls = new Map<string, number>();
 let customQueue: Track[] = [];
 
+let responseMessages: string[] = ["Insufficient permission"];
+
 export async function updateAccessToken(accessToken: AccessToken) {
   if (accessToken.access_token === "emptyAccessToken") {
     log("Access token empty");
@@ -55,13 +57,15 @@ export async function reorderCustomQueue(fromIndex: number, toIndex: number) {
   const t = customQueue[toIndex];
 }
 
-export async function removeFromCustomQueue(index: number) {
+export async function removeFromCustomQueue(index: number, uri: string) {
   try {
-    log("Removed song from queue");
-    customQueue.splice(index, 1);
-    return true;
+    if (customQueue[index].uri == uri) {
+      log("Removed song from queue");
+      customQueue.splice(index, 1);
+    }
+    return { success: true, message: "Removed from user queue" };
   } catch {
-    return false;
+    return { success: false, message: "Failed to remove from user queue" };
   }
 }
 
@@ -73,37 +77,28 @@ export async function addToCustomQueue(track: Track) {
         cookies().get("jwt")?.value
       ))
     )
-      return false;
+      return { success: false, message: responseMessages[0] };
     if (
       customQueue.find((value: Track, index: number) => {
         return value.uri == track.uri;
       })
     )
-      return false;
+      return { success: false, message: "Already in queue" };
     customQueue.push(track);
     log("Added to custom queue");
-    return true;
+    return { success: true, message: "Added to user queue" };
   } catch (error: any) {
     console.log(error);
-    activateDevice();
+    return activateDevice();
   }
 }
 
 export async function addToSpotifyQueue(track: Track) {
   try {
-    if (
-      !(await permission(
-        cookies().get("user")?.value,
-        cookies().get("jwt")?.value
-      ))
-    )
-      return false;
     await sdk?.player?.addItemToPlaybackQueue(track.uri, active_device!);
     log("Added to spotify queue");
-    return true;
   } catch (error: any) {
     console.log(error);
-    activateDevice();
   }
 }
 
@@ -115,15 +110,16 @@ export async function skipNext() {
         cookies().get("jwt")?.value
       ))
     )
-      return false;
+      return { success: false, message: responseMessages[0] };
     if (customQueue.length > 0) {
       await addToSpotifyQueue(customQueue.shift() as Track);
     }
     await sdk?.player?.skipToNext(active_device!);
     log("Skipped next");
-    return true;
+    return { success: true, message: "Skipped to next track" };
   } catch (error: any) {
-    activateDevice();
+    log(error);
+    return activateDevice();
   }
 }
 
@@ -135,12 +131,13 @@ export async function skipBack() {
         cookies().get("jwt")?.value
       ))
     )
-      return false;
+      return { success: false, message: responseMessages[0] };
     await sdk?.player?.skipToPrevious(active_device!);
     log("Skipped back");
-    return true;
+    return { success: true, message: "Skipped to previous track" };
   } catch (error: any) {
-    activateDevice();
+    log(error);
+    return activateDevice();
   }
 }
 
@@ -152,7 +149,7 @@ export async function play(context_uri?: string, shuffle?: boolean) {
         cookies().get("jwt")?.value
       ))
     )
-      return false;
+      return { success: false, message: responseMessages[0] };
     await sdk?.player.startResumePlayback(active_device!, context_uri);
     if (context_uri && shuffle) {
       await sdk?.player?.togglePlaybackShuffle(true);
@@ -160,10 +157,14 @@ export async function play(context_uri?: string, shuffle?: boolean) {
       await sdk?.player?.togglePlaybackShuffle(false);
     }
     lastCalls.set("queue", 0);
-    log("Started playing with shuffle turned " + shuffle);
-    return true;
+    log("Playing with shuffle " + shuffle);
+    return {
+      success: true,
+      message: "Playing with shuffle " + shuffle,
+    };
   } catch (error: any) {
-    activateDevice();
+    log(error);
+    return activateDevice();
   }
 }
 
@@ -175,32 +176,35 @@ export async function pause() {
         cookies().get("jwt")?.value
       ))
     )
-      return false;
+      return { success: false, message: responseMessages[0] };
     await sdk?.player.pausePlayback(active_device!);
     log("Paused");
-    return true;
+    return { success: true, message: "Paused playback" };
   } catch (error: any) {
-    activateDevice();
+    log(error);
+    return activateDevice();
   }
 }
 
 async function activateDevice() {
-  if ((await sdk?.getAccessToken()) == null) return false;
+  if ((await sdk?.getAccessToken()) == null)
+    return { success: false, message: "No access token" };
   const response = await sdk?.player?.getAvailableDevices();
   console.log(response);
   response?.devices.forEach(async (element) => {
     const device_ids = [element?.id];
-    const play = true;
     await sdk?.player?.transferPlayback(device_ids as string[], true);
     log("Found device " + element.id);
     active_device = element.id;
+    return { success: true, message: "Device found, activating..." };
   });
+  return { success: false, message: "No device found" };
 }
 
 let queue: Queue | undefined;
 export async function getQueue() {
   try {
-    if (!sdk) return false;
+    if (!sdk) return { success: false, message: "Internal error" };
     headers();
     const q = lastCalls.get("queue");
     if ((q && Date.now() - q > 5000) || !q) {
@@ -247,6 +251,7 @@ export async function getCurrentStatus() {
     return playback;
   } catch (error: any) {
     log("Device not activated");
+    return false;
   }
 }
 
@@ -258,12 +263,12 @@ export async function setVolume(value: number) {
         cookies().get("jwt")?.value
       ))
     )
-      return false;
+      return { success: false, message: responseMessages[0] };
     execSync(`pactl set-sink-volume @DEFAULT_SINK@ ${value}%`);
-    return true;
+    return { success: true };
   } catch (error) {
     log("Volume set failed");
-    return false;
+    return { success: false, message: "Couldn't set volume" };
   }
 }
 
@@ -275,6 +280,6 @@ export async function getVolume() {
     return result;
   } catch (error) {
     log("Couldn't get volume");
-    return false;
+    return { success: false, message: "Couldn't get volume" };
   }
 }
