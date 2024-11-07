@@ -12,13 +12,15 @@ import { playHandler } from "@/utils";
 export default function ViewAlbum({ album }: { album: SimplifiedAlbum }) {
   const [state, formAction] = useFormState(playHandler, {
     success: false,
+    message: "",
   });
 
   useEffect(() => {
+    if (state.message == "") return;
     if (state.success) {
-      Toast.add("Started playing");
-    } else if (state.message) {
       Toast.add(state.message);
+    } else if (state.message) {
+      Toast.add(state.message, { type: "error" });
     }
   }, [state]);
 

@@ -4,11 +4,11 @@ import ViewTrack from "./view_items/ViewTrack";
 import { getQueue } from "@/API";
 import { Queue, Track } from "@spotify/web-api-ts-sdk";
 import { LoadingOutlined } from "@ant-design/icons";
-import { SongQueue } from "@/types";
+import { SongQueue, SongQueueItem } from "@/types";
 
 export default function ViewQueue() {
   const [tracks, setTracks] = useState<Track[]>();
-  const [customTracks, setCustomTracks] = useState<Track[]>();
+  const [customTracks, setCustomTracks] = useState<SongQueueItem[]>();
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -39,7 +39,10 @@ export default function ViewQueue() {
     <>
       {loading && (
         <div className="justify-center items-center flex w-full h-full text-[10vw] text-white">
-          <LoadingOutlined />
+          <LoadingOutlined
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
         </div>
       )}
       {!loading && currentTrack !== null && tracks !== null && (
@@ -55,12 +58,13 @@ export default function ViewQueue() {
             {customTracks && customTracks.length > 0 && (
               <>
                 <h4 className="font-bold">User queue</h4>
-                {customTracks.map((track: Track, index: number) => (
+                {customTracks.map((value: SongQueueItem, index: number) => (
                   <ViewTrack
                     key={index}
-                    track={track}
+                    track={value.track}
                     showButton={false}
                     customQueueIndex={index}
+                    user={value.user}
                   />
                 ))}
               </>

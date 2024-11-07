@@ -9,7 +9,12 @@ import {
 
 export interface SongQueue {
   queue: Queue | undefined;
-  customQueue: Track[];
+  customQueue: SongQueueItem[];
+}
+
+export interface SongQueueItem {
+  track: Track;
+  user?: string;
 }
 
 export interface PlaylistBase {

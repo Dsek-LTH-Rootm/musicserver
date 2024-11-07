@@ -11,12 +11,12 @@ import type { Queue } from "@spotify/web-api-ts-sdk";
 import { log } from "./utils";
 import { redirect } from "next/navigation";
 import { permission } from "./auth";
-import { SongQueue } from "./types";
+import { SongQueue, SongQueueItem } from "./types";
 
 let sdk: SpotifyApi | undefined;
 let active_device: string | null;
 let lastCalls = new Map<string, number>();
-let customQueue: Track[] = [];
+let customQueue: SongQueueItem[] = [];
 
 let responseMessages: string[] = ["Insufficient permission"];
 
@@ -54,12 +54,11 @@ export async function search(query: string) {
 
 export async function reorderCustomQueue(fromIndex: number, toIndex: number) {
   log("Reordering queue");
-  const t = customQueue[toIndex];
 }
 
 export async function removeFromCustomQueue(index: number, uri: string) {
   try {
-    if (customQueue[index].uri == uri) {
+    if (customQueue[index].track.uri == uri) {
       log("Removed song from queue");
       customQueue.splice(index, 1);
     }
@@ -69,7 +68,7 @@ export async function removeFromCustomQueue(index: number, uri: string) {
   }
 }
 
-export async function addToCustomQueue(track: Track) {
+export async function addToCustomQueue(track: Track, user?: string) {
   try {
     if (
       !(await permission(
@@ -79,12 +78,13 @@ export async function addToCustomQueue(track: Track) {
     )
       return { success: false, message: responseMessages[0] };
     if (
-      customQueue.find((value: Track, index: number) => {
-        return value.uri == track.uri;
+      customQueue.find((value: SongQueueItem, index: number) => {
+        return value.track.uri == track.uri;
       })
     )
       return { success: false, message: "Already in queue" };
-    customQueue.push(track);
+    const item = { track: track, user: user };
+    customQueue.push(item);
     log("Added to custom queue");
     return { success: true, message: "Added to user queue" };
   } catch (error: any) {
@@ -112,7 +112,8 @@ export async function skipNext() {
     )
       return { success: false, message: responseMessages[0] };
     if (customQueue.length > 0) {
-      await addToSpotifyQueue(customQueue.shift() as Track);
+      const a = customQueue.shift();
+      if (a) await addToSpotifyQueue(a.track);
     }
     await sdk?.player?.skipToNext(active_device!);
     log("Skipped next");
@@ -204,7 +205,7 @@ async function activateDevice() {
 let queue: Queue | undefined;
 export async function getQueue() {
   try {
-    if (!sdk) return { success: false, message: "Internal error" };
+    if (!sdk) return false;
     headers();
     const q = lastCalls.get("queue");
     if ((q && Date.now() - q > 5000) || !q) {
@@ -244,7 +245,8 @@ export async function getCurrentStatus() {
         playback?.item.duration_ms - playback?.progress_ms < 6000 &&
         customQueue.length > 0
       ) {
-        await addToSpotifyQueue(customQueue.shift() as Track);
+        const a = customQueue.shift();
+        if (a) await addToSpotifyQueue(a.track);
       }
     }
 

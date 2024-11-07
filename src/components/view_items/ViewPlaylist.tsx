@@ -11,13 +11,15 @@ import { useFormState } from "react-dom";
 export default function ViewPlaylist({ playlist }: { playlist: PlaylistBase }) {
   const [state, formAction] = useFormState(playHandler, {
     success: false,
+    message: "",
   });
 
   useEffect(() => {
+    if (state.message == "") return;
     if (state.success) {
-      Toast.add("Started playing");
-    } else if (state.message) {
       Toast.add(state.message);
+    } else {
+      Toast.add(state.message, { type: "error" });
     }
   }, [state]);
 
@@ -27,7 +29,10 @@ export default function ViewPlaylist({ playlist }: { playlist: PlaylistBase }) {
         <input type="hidden" name="uri" value={playlist?.uri} />
         <input type="hidden" name="shuffle" value={1} />
         <button type="submit" className={styles.button}>
-          <PlayCircleFilled />
+          <PlayCircleFilled
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
         </button>
       </form>
       <a

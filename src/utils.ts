@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import { Settings } from "./types";
 
 import { addToCustomQueue, play, removeFromCustomQueue } from "./API";
+import { cookies } from "next/headers";
 
 export async function log(message: string) {
   console.log(new Date().toUTCString() + ": " + message);
@@ -23,38 +24,45 @@ export async function getRedirectUri() {
   return process.env.BASE_URL as string;
 }
 
-export const addToQueueHandler = async (prevState: any, formData: FormData) => {
-  "use server";
-  const data = formData.get("track");
-  if (!data) return { success: false, message: "Invalid parameters" };
-  const track = JSON.parse(data.toString());
-  if (await addToCustomQueue(track)) return { success: true };
-  else return { success: false, message: "Song is already in queue" };
-};
-
 export const playHandler = async (prevState: any, formData: FormData) => {
   "use server";
   const uri = formData.get("uri");
   const shuffle = formData.get("shuffle");
   if (!uri || !shuffle)
     return { success: false, message: "Invalid parameters" };
-  play(uri.toString(), shuffle.toString() == "1");
-  return { success: true };
+  return await play(uri.toString(), shuffle.toString() == "1");
 };
 
-export const removeTrackHandler = async (
+export const addToQueueHandler = async (prevState: any, formData: FormData) => {
+  "use server";
+  const data = formData.get("track");
+  let userid: string | undefined = cookies().get("jwt")?.value;
+  if (!userid) {
+    userid = cookies().get("user")?.value;
+  }
+  if (!data) return { success: false, message: "Invalid parameters" };
+  const track = JSON.parse(data.toString());
+  const response = await addToCustomQueue(track, user);
+  return response;
+};
+
+export const removeFromQueueHandler = async (
   prevState: any,
   formData: FormData
 ) => {
   "use server";
   const data = formData.get("index");
-  if (!data) return { success: false, message: "Invalid parameters" };
+  const uri = formData.get("uri");
+  if (!data || !uri) return { success: false, message: "Invalid parameters" };
   try {
-    removeFromCustomQueue(Number.parseInt(data.toString()));
+    const response = await removeFromCustomQueue(
+      Number.parseInt(data.toString()),
+      uri.toString()
+    );
+    return response;
   } catch {
     return { success: false, message: "Unable to parse index" };
   }
-  return { success: true };
 };
 
 export async function getSettings() {

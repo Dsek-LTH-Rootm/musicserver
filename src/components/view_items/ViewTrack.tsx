@@ -4,7 +4,7 @@ import { PlusCircleFilled, MinusCircleFilled } from "@ant-design/icons";
 import { SimplifiedArtist, Track } from "@spotify/web-api-ts-sdk";
 import Image from "next/image";
 import { useFormState } from "react-dom";
-import { addToQueueHandler, removeTrackHandler } from "@/utils";
+import { addToQueueHandler, removeFromQueueHandler } from "@/utils";
 import { useEffect } from "react";
 import { Toast } from "../Toast";
 
@@ -12,31 +12,37 @@ export default function ViewTrack({
   track,
   showButton,
   customQueueIndex,
+  user,
 }: {
   track: Track;
   showButton?: boolean;
   customQueueIndex?: number;
+  user?: string;
 }) {
   const [state, formAction] = useFormState(addToQueueHandler, {
     success: false,
+    message: "",
   });
-  const [removeState, removeFormAction] = useFormState(removeTrackHandler, {
+  const [removeState, removeFormAction] = useFormState(removeFromQueueHandler, {
     success: false,
+    message: "",
   });
 
   useEffect(() => {
+    if (state.message == "") return;
     if (state.success) {
-      Toast.add("Track added to queue");
-    } else if (state.message) {
+      Toast.add(state.message);
+    } else {
       Toast.add(state.message, { type: "error" });
     }
   }, [state]);
 
   useEffect(() => {
-    if (state.success) {
-      Toast.add("Track removed from queue");
-    } else if (state.message) {
-      Toast.add(state.message, { type: "error" });
+    if (removeState.message == "") return;
+    if (removeState.success) {
+      Toast.add(removeState.message);
+    } else {
+      Toast.add(removeState.message, { type: "error" });
     }
   }, [removeState]);
 
@@ -45,6 +51,7 @@ export default function ViewTrack({
       {showButton !== false && (
         <form action={formAction}>
           <input type="hidden" name="track" value={JSON.stringify(track)} />
+          <input type="hidden" name="user" value={""} />
           <button type="submit" className={styles.button}>
             <PlusCircleFilled
               className="justify-center"
@@ -90,19 +97,20 @@ export default function ViewTrack({
           )
         )}
       </div>
-      {customQueueIndex &&
-        customQueueIndex !== 0 && ( // TODO: Fix weird bug where a 0 appears for no reason at all
-          <form action={removeFormAction}>
-            <input type="hidden" name="index" value={customQueueIndex} />
-            <button type="submit" className={styles.button}>
-              <MinusCircleFilled
-                className="justify-center"
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              />
-            </button>
-          </form>
-        )}
+      {user}
+      {(customQueueIndex || customQueueIndex == 0) && ( // TODO: Fix weird bug where a 0 appears for no reason at all
+        <form action={removeFormAction}>
+          <input type="hidden" name="index" value={customQueueIndex} />
+          <input type="hidden" name="uri" value={track.uri} />
+          <button type="submit" className={styles.button}>
+            <MinusCircleFilled
+              className="justify-center"
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            />
+          </button>
+        </form>
+      )}
       <p className={styles.duration}>{getTime(track?.duration_ms)}</p>
     </div>
   );
