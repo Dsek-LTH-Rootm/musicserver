@@ -13,6 +13,7 @@ import Image from "next/image";
 import Slider from "./Slider";
 import Progress from "./Progress";
 import { Toast } from "./Toast";
+import { APIResponse } from "@/types";
 
 export default function Player() {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -33,44 +34,44 @@ export default function Player() {
   };
 
   const back = async () => {
-    const success = await skipBack();
-    if (success) {
+    const response: APIResponse = await skipBack();
+    if (response.success) {
       setPlaying(true);
-      Toast.add("Skipped to previous song");
+      Toast.add(response.message);
     } else {
-      Toast.add("Insufficient permissions");
+      Toast.add(response.message);
     }
   };
 
   const resume = async () => {
-    const success = await play();
-    if (success) {
+    const response = await play();
+    if (response.success) {
       setPlaying(true);
       play();
-      Toast.add("Started playing");
+      Toast.add(response.message);
     } else {
-      Toast.add("Insufficient permissions");
+      Toast.add(response.message);
     }
   };
 
   const stop = async () => {
-    const success = await pause();
-    if (success) {
+    const response: APIResponse = await pause();
+    if (response.success) {
       setPlaying(false);
       pause();
-      Toast.add("Stopped playing");
+      Toast.add(response.message);
     } else {
-      Toast.add("Insufficient permissions");
+      Toast.add(response.message);
     }
   };
 
   const forward = async () => {
-    const success = await skipNext();
-    if (success) {
+    const response: APIResponse = await skipNext();
+    if (response.success) {
       setPlaying(true);
-      Toast.add("Skipped to next song");
+      Toast.add(response.message);
     } else {
-      Toast.add("Insufficient permissions");
+      Toast.add(response.message);
     }
   };
 
@@ -121,20 +122,36 @@ export default function Player() {
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.button} type="button" onClick={back}>
-          <LeftOutlined className={`${styles.icon} ${styles.small}`} />
+          <LeftOutlined
+            className={`${styles.icon} ${styles.small}`}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
         </button>
         {playing && (
           <button className={styles.button} type="button" onClick={stop}>
-            <PauseCircleFilled className={styles.icon} />
+            <PauseCircleFilled
+              className={styles.icon}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            />
           </button>
         )}
         {!playing && (
           <button className={styles.button} type="button" onClick={resume}>
-            <PlayCircleFilled className={styles.icon} />
+            <PlayCircleFilled
+              className={styles.icon}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            />
           </button>
         )}
         <button className={styles.button} type="button" onClick={forward}>
-          <RightOutlined className={`${styles.icon} ${styles.small}`} />
+          <RightOutlined
+            className={`${styles.icon} ${styles.small}`}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
         </button>
       </div>
       <Progress playbackState={currentTrack as PlaybackState} />

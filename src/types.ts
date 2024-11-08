@@ -9,7 +9,12 @@ import {
 
 export interface SongQueue {
   queue: Queue | undefined;
-  customQueue: Track[];
+  customQueue: SongQueueItem[];
+}
+
+export interface SongQueueItem {
+  track: Track;
+  user?: string;
 }
 
 export interface PlaylistBase {
@@ -58,4 +63,9 @@ export interface Settings {
   requireAccount: string;
   bannedUsers: string[];
   enableAdminRoles: string[];
+}
+
+export interface APIResponse {
+  success: boolean;
+  message: string;
 }
