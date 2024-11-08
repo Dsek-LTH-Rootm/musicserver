@@ -44,7 +44,11 @@ export default async function DefaultLayout({
               href="/admin"
               className="transform transition hover:scale-105 hover:text-gray-400 hover:rotate-90"
             >
-              <SettingOutlined className="flex aspect-square h-full justify-center" />
+              <SettingOutlined
+                className="flex aspect-square h-full justify-center"
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
             </Link>
           </div>
         </div>
@@ -53,7 +57,11 @@ export default async function DefaultLayout({
             href="/"
             className="transform transition hover:scale-105 hover:text-gray-400 mr-3"
           >
-            <HomeFilled className="flex aspect-square h-full justify-center" />
+            <HomeFilled
+              className="flex aspect-square h-full justify-center"
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            />
           </Link>
           <form
             action="/results"
@@ -63,14 +71,18 @@ export default async function DefaultLayout({
               <input
                 type="text"
                 name="search"
-                className="flex justify-items-center items-center text-base h-full w-full pl-[10px] pr-[10px] bg-black box-border outline-none text-white transition ease-in-out"
+                className="flex items-center text-base h-full w-full pl-[10px] pr-[10px] bg-black box-border outline-none text-white transition ease-in-out"
                 placeholder="Search"
               />
               <button
                 type="submit"
                 className="w-auto bg-black h-full aspect-square text-2xl border border-transparent border-l-gray-400 text-white z-10 hover:bg-gray-800 focus:bg-gray-800"
               >
-                <SearchOutlined className="pl-[10px] pr-[10px] h-full text-base justify-center items-center flex w-auto" />
+                <SearchOutlined
+                  className="pl-[10px] pr-[10px] h-full text-base justify-center items-center flex w-auto"
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                />
               </button>
             </div>
           </form>

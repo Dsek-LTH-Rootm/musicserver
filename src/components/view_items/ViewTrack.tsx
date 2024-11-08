@@ -97,8 +97,8 @@ export default function ViewTrack({
           )
         )}
       </div>
-      {user}
-      {(customQueueIndex || customQueueIndex == 0) && ( // TODO: Fix weird bug where a 0 appears for no reason at all
+      {user && <span className="min-w-20 text-xs mr-2">Queued by: {user}</span>}
+      {(customQueueIndex || customQueueIndex == 0) && (
         <form action={removeFormAction}>
           <input type="hidden" name="index" value={customQueueIndex} />
           <input type="hidden" name="uri" value={track.uri} />

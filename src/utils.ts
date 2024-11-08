@@ -1,9 +1,11 @@
 "use server";
 import { promises as fs } from "fs";
-import { Settings } from "./types";
+import { JwtToken, Settings } from "./types";
 
 import { addToCustomQueue, play, removeFromCustomQueue } from "./API";
 import { cookies } from "next/headers";
+import { jwtDecode } from "jwt-decode";
+import { getWord } from "./words";
 
 export async function log(message: string) {
   console.log(new Date().toUTCString() + ": " + message);
@@ -36,9 +38,15 @@ export const playHandler = async (prevState: any, formData: FormData) => {
 export const addToQueueHandler = async (prevState: any, formData: FormData) => {
   "use server";
   const data = formData.get("track");
-  let userid: string | undefined = cookies().get("jwt")?.value;
-  if (!userid) {
-    userid = cookies().get("user")?.value;
+  let jwt: string | undefined = cookies().get("jwt")?.value;
+  let user: string | undefined = undefined;
+  if (!jwt) {
+    const userid = cookies().get("user")?.value;
+    if (userid) {
+      user = (await getWord(userid)) as string;
+    }
+  } else {
+    user = (jwtDecode(jwt) as JwtToken).preferred_username;
   }
   if (!data) return { success: false, message: "Invalid parameters" };
   const track = JSON.parse(data.toString());
